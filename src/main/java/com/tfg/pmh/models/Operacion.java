@@ -3,10 +3,8 @@ package com.tfg.pmh.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
@@ -27,4 +25,17 @@ public class Operacion {
     @NotBlank
     @Pattern(regexp = "^(A|B)$")
     private String tipo;
+
+    @Valid
+    @ManyToOne
+    private Habitante habitante;
+
+    @Valid
+    @ManyToOne
+    private Operacion origen;
+
+    // Este campo es opcional, debería poder ser nulo
+    @Valid
+    @ManyToOne
+    private Operacion destino;
 }

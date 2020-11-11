@@ -32,10 +32,6 @@ public abstract class Persona {
 	@Past
 	private Date fechaNacimiento;
 
-	@NotBlank
-	@Pattern(regexp = "^(H|M)$")
-	private String sexo;
-
 	@Valid
 	@OneToOne(optional = false, cascade = CascadeType.REMOVE)
 	private CuentaUsuario cuentaUsuario;
