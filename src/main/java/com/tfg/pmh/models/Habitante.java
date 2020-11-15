@@ -27,4 +27,11 @@ public class Habitante extends Persona {
     @Valid
     @ManyToOne
     private Vivienda Vivienda;
+
+    @Valid
+    @ManyToOne
+    private Identificador tarjetaIdentificacion;
+
+    @NotBlank
+    private String identificacion;
 }
