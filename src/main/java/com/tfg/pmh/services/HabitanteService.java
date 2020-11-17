@@ -18,16 +18,6 @@ public class HabitanteService {
 
     private CuentaUsuarioService cuentaUsuarioService;
 
-    public Habitante create() {
-        Habitante habitante = new Habitante();
-        habitante.setNacionalidad("");
-        habitante.setSexo("");
-        CuentaUsuario cuentaUsuario = this.cuentaUsuarioService.create();
-        habitante.setCuentaUsuario(cuentaUsuario);
-
-        return habitante;
-    }
-
     public void save(Habitante habitante) {
         assert habitante != null;
 

@@ -17,17 +17,6 @@ public class AdministradorService {
     @Autowired
     private CuentaUsuarioService cuentaUsuarioService;
 
-    public Administrador create() {
-     Administrador res = new Administrador();
-     res.setName("");
-     res.setSurname("");
-     res.setEmail("");
-     CuentaUsuario cuentaUsuario = cuentaUsuarioService.create();
-     res.setCuentaUsuario(cuentaUsuario);
-
-     return res;
-    }
-
     public void save(Administrador admin) {
         assert admin != null;
 
