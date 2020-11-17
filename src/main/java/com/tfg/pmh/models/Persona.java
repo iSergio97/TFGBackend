@@ -19,10 +19,17 @@ import java.util.Date;
 public abstract class Persona {
 
 	@NotBlank
-	private String name;
-	
+	private String nombre;
+
+	private String particulaPrimerApellido;
+
 	@NotBlank
-	private String surname;
+	private String primerApellido;
+
+	private String particulaSegundoApellido;
+
+	@NotBlank
+	private String segundoApellido;
 
 	//TODO: Plantear Regex
 	@NotBlank
