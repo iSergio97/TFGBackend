@@ -11,6 +11,11 @@ import java.util.Collection;
 @Service
 public class AdministradorService {
 
+    /*
+        Aquí irán, a parte de la creación de nuevos admins, todo lo relacionado con el sistema
+        Puede que interese un modelo para poder hacer las queries, pero debería ser el administrador
+        el que realice y trate esas queries
+    */
     @Autowired
     private AdministradorRepository repository;
 
