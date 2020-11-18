@@ -34,4 +34,8 @@ public class HabitanteService {
         return this.repository.findHabitanteByViviendaId(id);
     }
 
+    public Habitante findByUsername(String username) {
+        return this.repository.findByUsername(username);
+    }
+
 }
