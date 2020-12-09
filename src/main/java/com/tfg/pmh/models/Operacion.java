@@ -6,10 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
+import javax.validation.*;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Entity
@@ -27,7 +25,7 @@ public class Operacion {
     private Date fechaOperacion;
 
     @NotBlank
-    @Pattern(regexp = "^(A|B)$")
+    @Pattern(regexp = "^(A|B|M)$")
     private String tipo;
 
     @Valid
@@ -36,10 +34,9 @@ public class Operacion {
 
     @Valid
     @ManyToOne
-    private Operacion origen;
+    private Vivienda viviendaOrigen;
 
     // Este campo es opcional, debería poder ser nulo
-    @Valid
     @ManyToOne
-    private Operacion destino;
+    private Vivienda viviendaDestino;
 }
