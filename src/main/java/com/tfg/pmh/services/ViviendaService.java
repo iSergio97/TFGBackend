@@ -1,7 +1,7 @@
 package com.tfg.pmh.services;
 
 import com.tfg.pmh.models.Vivienda;
-import com.tfg.pmh.repositories.ViviendaRepository;
+import com.tfg.pmh.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +21,6 @@ public class ViviendaService {
 
     public Vivienda findById(Long id) {
         return this.repository.findById(id).orElse(null);
-    }
-
-    public Collection<Vivienda> findViviendaByParams(String distrito, String calle) {
-        assert distrito != null;
-        assert calle != null;
-        return this.repository.findViviendasByDistritoOrCalle(distrito, calle);
     }
 
     public Collection<Vivienda> findViviendasByCalle(String calle) {
