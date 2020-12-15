@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -36,6 +37,7 @@ public class Habitante extends Persona {
     @ManyToOne
     private Identificador tarjetaIdentificacion;
 
-    @NotBlank
+    // @NotBlank
+    @Column(unique = true)
     private String identificacion;
 }

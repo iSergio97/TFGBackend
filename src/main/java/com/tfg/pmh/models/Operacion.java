@@ -36,7 +36,8 @@ public class Operacion {
     @ManyToOne
     private Vivienda viviendaOrigen;
 
-    // Este campo es opcional, debería poder ser nulo
+    // Este campo coincide con el campo viviendaOrigen si se mantiene en la misma vivienda
     @ManyToOne
+    @Valid
     private Vivienda viviendaDestino;
 }

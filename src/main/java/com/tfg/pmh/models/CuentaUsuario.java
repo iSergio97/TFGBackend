@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Getter
@@ -26,6 +27,9 @@ public class CuentaUsuario {
     private String password;
 
     @NotBlank
-    @Column(unique = true) //TODO: Plantear si esto es bueno en cuanto a eficiencia de cálculo
     private String salt;
+
+    @NotBlank
+    @Pattern(regexp = "^(ADMIN|HABITANTE)$")
+    private String rol;
 }

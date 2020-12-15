@@ -32,21 +32,8 @@ public class Vivienda {
     private String municipio;
 
     @NotBlank
-    private String distrito;
-
-    @NotBlank
-    private String seccion;
-
-    @NotBlank
     private String calle;
 
-    @NotBlank
     private Integer numero;
-
-    @NotBlank
-    private String puerta;
-
-    @NotBlank
-    private String planta;
 
 }
