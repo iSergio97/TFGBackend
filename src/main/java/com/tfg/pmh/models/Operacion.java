@@ -28,15 +28,19 @@ public class Operacion {
     @Pattern(regexp = "^(A|B|M)$")
     private String tipo;
 
+    @NotBlank
+    private String subtipo;
+
     @Valid
     @ManyToOne
     private Habitante habitante;
 
+    // Si la operación es de alta por nacimiento, la vivienda origen puede ser nula
     @Valid
     @ManyToOne
     private Vivienda viviendaOrigen;
 
-    // Este campo coincide con el campo viviendaOrigen si se mantiene en la misma vivienda
+    // Este campo puede estar nulo, si la operación es por modificación de datos personales
     @ManyToOne
     @Valid
     private Vivienda viviendaDestino;
