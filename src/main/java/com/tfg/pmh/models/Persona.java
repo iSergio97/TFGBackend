@@ -9,6 +9,7 @@ import javax.validation.constraints.Pattern;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import java.util.Date;
 
@@ -38,6 +39,14 @@ public abstract class Persona {
 	@NotNull
 	@Past
 	private Date fechaNacimiento;
+
+	/*
+		No puede ser nula ni estar vacío, en ese caso, por defecto, se le pone una imagen
+		por defecto. Analizar imágenes para poder por defecto
+	*/
+	@URL
+	@NotBlank
+	private String image;
 
 	@Valid
 	@OneToOne(optional = false, cascade = CascadeType.REMOVE)
