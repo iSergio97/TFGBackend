@@ -1,11 +1,13 @@
 package com.tfg.pmh.controllers;
 
 import com.tfg.pmh.models.Habitante;
+import com.tfg.pmh.models.Respuesta;
 import com.tfg.pmh.services.HabitanteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,20 +29,24 @@ public class HabitanteController {
     @Autowired
     private HabitanteService habitanteService;
 
+    // Documentar método
     @GetMapping("/login")
-    private ResponseEntity<Integer> login(String username, String password) {
+    private Respuesta login(String username, String password) {
         try {
+            if("".equals(username) || "".equals(password)){
+                return new Respuesta(350, null);
+            }
             Habitante habitante = habitanteService.findByUsername(username);
             String hashedPassword = hashText(password);
-            assert hashedPassword != null;
+            Assert.notNull(habitante);
             if(hashedPassword.equals(habitante.getCuentaUsuario().getPassword())) {
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new Respuesta(200, habitante);
             } else{
-                return new ResponseEntity<>(HttpStatus.valueOf(401));
+                return new Respuesta(350, null);
             }
         } catch (Exception e) {
-            // Consultar si añadir opcion de mensajes de trazas
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            // Excepción controlada
+            return new Respuesta(350, null);
         }
     }
 
