@@ -1,12 +1,11 @@
 package com.tfg.pmh.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class Respuesta {
 
     private Integer status;
