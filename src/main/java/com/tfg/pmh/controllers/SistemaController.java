@@ -3,22 +3,14 @@ package com.tfg.pmh.controllers;
 import com.tfg.pmh.models.*;
 import com.tfg.pmh.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.persistence.Id;
-import javax.xml.ws.Response;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 @RestController
@@ -102,6 +94,7 @@ public class SistemaController {
         Calendar fechaNacimiento = Calendar.getInstance();
         fechaNacimiento.set(1997, Calendar.FEBRUARY, 10);
         administrador.setFechaNacimiento(fechaNacimiento.getTime());
+        administrador.setImage("https://thispersondoesnotexist.com/image");
 
         administradorService.save(administrador);
 
@@ -122,7 +115,7 @@ public class SistemaController {
         fechaNacimiento = Calendar.getInstance();
         fechaNacimiento.set(1996, Calendar.JANUARY, 31);
         administrador.setFechaNacimiento(fechaNacimiento.getTime());
-
+        administrador.setImage("https://thispersondoesnotexist.com/image");
         administradorService.save(administrador);
     }
 
@@ -152,6 +145,7 @@ public class SistemaController {
                 habitante.setNombre("Habitante "+String.valueOf(i) + " nombre");
                 habitante.setPrimerApellido("Habitante "+String.valueOf(i) + " primer apellido");
                 habitante.setSegundoApellido("Habitante "+String.valueOf(i) + " segundo apellido");
+                habitante.setImage("https://thispersondoesnotexist.com/image");
                 fechaNacimiento = Calendar.getInstance();
                 Random rand = new Random();
                 int upperboundMonth = 11;
