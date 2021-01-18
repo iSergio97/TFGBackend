@@ -28,7 +28,7 @@ public class SolicitudForm {
     private Long solicitaPorID; // Campo añadido para la modificación de datos de menores por sus padres
     
     @NotBlank
-    private String dni;
+    private String identificacion;
 
     @NotBlank
     private String nombre;
@@ -36,8 +36,20 @@ public class SolicitudForm {
     @NotBlank
     private String apellidos;
 
-    @NotNull
-    private Long viviendaNuevaID;
+    @NotBlank
+    private String pais;
+
+    @NotBlank
+    private String provincia;
+
+    @NotBlank
+    private String municipio;
+
+    @NotBlank
+    private String calle;
+
+    @NotBlank
+    private Integer numero;
 
     @Past
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
