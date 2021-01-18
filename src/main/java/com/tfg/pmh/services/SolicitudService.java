@@ -2,14 +2,13 @@ package com.tfg.pmh.services;
 
 import com.tfg.pmh.forms.SolicitudForm;
 import com.tfg.pmh.models.Solicitud;
+import com.tfg.pmh.models.Vivienda;
 import com.tfg.pmh.repositories.SolicitudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.NoSuchElementException;
 
 @Service
 public class SolicitudService {
@@ -39,18 +38,16 @@ public class SolicitudService {
 
     public Solicitud deconstruct(SolicitudForm solicitudForm) {
 
-        // En la solicitud no es donde se cambian los datos, es en la operación. Ahí se debe comprobar si hay silicitadoPor.
-        // Si lo hay, cambiar los datos del solicitadoPor
         Solicitud solicitud = new Solicitud();
         solicitud.setFecha(new Date());
         solicitud.setSolicitante(this.habitanteService.findById(solicitudForm.getSolicitanteID()));
         solicitud.setSolicitaPor(this.habitanteService.findById(solicitudForm.getSolicitaPorID()));
-        solicitud.setDni(solicitudForm.getDni());
+        solicitud.setIdentificacion(solicitudForm.getIdentificacion());
         solicitud.setNombre(solicitudForm.getNombre());
         solicitud.setApellidos(solicitudForm.getApellidos());
-        solicitud.setViviendaNueva(viviendaService.findById(solicitudForm.getViviendaNuevaID()));
-        // Revisar si fuera necesario un parse
+        solicitud.setViviendaNueva(viviendaService.findViviendasByCalleYNumero(solicitudForm.getCalle(), solicitudForm.getNumero()));
         solicitud.setFecha(solicitudForm.getFechaNacimiento());
+
         return solicitud;
     }
 }

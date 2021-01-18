@@ -1,5 +1,6 @@
 package com.tfg.pmh.services;
 
+import com.tfg.pmh.forms.CuentaUsuarioForm;
 import com.tfg.pmh.models.CuentaUsuario;
 import com.tfg.pmh.models.Habitante;
 import com.tfg.pmh.models.Vivienda;
@@ -16,6 +17,7 @@ public class HabitanteService {
     @Autowired
     private HabitanteRepository repository;
 
+    @Autowired
     private CuentaUsuarioService cuentaUsuarioService;
 
     public void save(Habitante habitante) {

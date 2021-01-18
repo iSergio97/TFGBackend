@@ -27,4 +27,9 @@ public class ViviendaService {
         assert calle != null;
         return this.repository.findViviendasByCalle(calle);
     }
+    public Vivienda findViviendasByCalleYNumero(String calle, Integer numero) {
+        assert calle != null;
+        return this.repository.findViviendaByCalleYNumero(calle, numero);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.tfg.pmh.services;
 
+import com.tfg.pmh.forms.CuentaUsuarioForm;
 import com.tfg.pmh.models.CuentaUsuario;
 import com.tfg.pmh.repositories.CuentaUsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,18 @@ public class CuentaUsuarioService {
             res.append(combination[random]);
         }
         return res.toString();
+    }
+
+    public Boolean existUsername(String username) {
+        return this.repository.existUsername(username) != 0;
+    }
+
+    public CuentaUsuario deconstruct(CuentaUsuarioForm cuentaUsuarioForm) {
+        CuentaUsuario cuentaUsuario = this.findOne(cuentaUsuarioForm.getId());
+
+        cuentaUsuario.setUsername(cuentaUsuario.getUsername());
+        cuentaUsuario.setPassword(cuentaUsuario.getPassword());
+
+        return cuentaUsuario;
     }
 }
