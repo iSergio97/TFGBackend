@@ -33,16 +33,23 @@ public class Solicitud {
     @ManyToOne
     private Habitante solicitaPor; // Campo añadido para la modificación de datos de menores por sus padres
 
-    // Sólo para menores de edad que lo quieran añadir
-    @NotBlank
-    @Pattern(regexp = "^\\d{8}$")
-    private String dni;
+    private String justificacion;
 
+    @NotBlank
+    @Pattern(regexp = "^[PAR]$")
+    private String estado;
+
+    // Sólo para menores de edad que lo quieran añadir o para personas con tarjeta identificativa
+    @NotBlank
+    @Pattern(regexp = "^(\\d{8}\\w)|(\\d{7}[XYZ])$")
+    private String identificacion;
+
+    @NotBlank
     private String nombre;
 
+    @NotBlank
     private String apellidos;
 
-    @Valid
     @ManyToOne
     private Vivienda viviendaNueva;
 

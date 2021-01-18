@@ -23,7 +23,7 @@ public class Habitante extends Persona {
     private Long id;
 
     @NotBlank
-    @Pattern(regexp = "^(H|M)$")
+    @Pattern(regexp = "^[HM]$")
     private String sexo;
 
     @NotBlank

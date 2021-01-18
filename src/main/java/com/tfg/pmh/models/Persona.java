@@ -40,10 +40,6 @@ public abstract class Persona {
 	@Past
 	private Date fechaNacimiento;
 
-	/*
-		No puede ser nula ni estar vacío, en ese caso, por defecto, se le pone una imagen
-		por defecto. Analizar imágenes para poder por defecto
-	*/
 	@URL
 	@NotBlank
 	private String image;

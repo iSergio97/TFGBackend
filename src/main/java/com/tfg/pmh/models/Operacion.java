@@ -25,7 +25,7 @@ public class Operacion {
     private Date fechaOperacion;
 
     @NotBlank
-    @Pattern(regexp = "^(A|B|M)$")
+    @Pattern(regexp = "^[ABM]$")
     private String tipo;
 
     @NotBlank
@@ -44,4 +44,8 @@ public class Operacion {
     @ManyToOne
     @Valid
     private Vivienda viviendaDestino;
+
+    @ManyToOne
+    @Valid
+    private Solicitud solicitud;
 }
