@@ -2,6 +2,9 @@ package com.tfg.pmh.repositories;
 
 import com.tfg.pmh.models.CuentaUsuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface CuentaUsuarioRepository extends JpaRepository<CuentaUsuario, Long> {
+    @Query("SELECT COUNT(C) FROM CuentaUsuario C WHERE C.username = ?1")
+    Integer existUsername(String username);
 }
