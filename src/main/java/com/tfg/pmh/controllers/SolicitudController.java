@@ -26,7 +26,7 @@ public class SolicitudController {
 
     //@RequestBody Habitante habitante
     @PostMapping("/habitante/new")
-    public Respuesta prueba(@RequestBody SolicitudForm solicitud, BindingResult bindingResult) {
+    public Respuesta prueba(@RequestBody SolicitudForm solicitud) {
         Respuesta respuesta = new Respuesta();
         // Revisar qué status pondremos para BadRequest en el parámetro
         respuesta.setStatus(350);

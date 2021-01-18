@@ -130,7 +130,6 @@ public class SistemaController {
 
         for(int i = 0; i < 100; i++) {
             try {
-                System.out.println("Creación habitante " + i);
                 cuentaUsuario = new CuentaUsuario();
                 cuentaUsuario.setUsername("habitante"+ String.valueOf(i));
                 cuentaUsuario.setSalt(hashText(createSalt()));
@@ -218,7 +217,7 @@ public class SistemaController {
 
                 int calle = (int) (Math.random() * (callesList.size() +1));
                 vivienda = new Vivienda();
-                vivienda.setCalle(callesList.get(i));
+                vivienda.setCalle(callesList.get(calle));
                 vivienda.setPais("ESPAÑA");
                 vivienda.setProvincia("SEVILLA");
                 vivienda.setMunicipio("ÉCIJA");
@@ -228,7 +227,6 @@ public class SistemaController {
 
                 habitanteService.save(habitante);
 
-                System.out.println("Habitante " + i + " creado");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 System.out.println("Excepción en habitante " + e.getMessage());
