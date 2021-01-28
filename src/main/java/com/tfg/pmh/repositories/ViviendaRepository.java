@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Collection;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public interface ViviendaRepository extends JpaRepository<Vivienda, Long> {
 
     @Query("SELECT V FROM Vivienda V WHERE V.calle = ?1 and V.municipio = 'ECIJA' and V.pais = 'ESPAÑA' and V.provincia = 'SEVILLA'")
