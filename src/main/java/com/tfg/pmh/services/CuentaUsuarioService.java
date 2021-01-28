@@ -44,15 +44,15 @@ public class CuentaUsuarioService {
         return res.toString();
     }
 
-    public Boolean existUsername(String username) {
-        return this.repository.existUsername(username) != 0;
+    public Boolean existUsername(String username, Long id) {
+        return this.repository.existUsername(username, id) != 0;
     }
 
     public CuentaUsuario deconstruct(CuentaUsuarioForm cuentaUsuarioForm) {
         CuentaUsuario cuentaUsuario = this.findOne(cuentaUsuarioForm.getId());
 
-        cuentaUsuario.setUsername(cuentaUsuario.getUsername());
-        cuentaUsuario.setPassword(cuentaUsuario.getPassword());
+        cuentaUsuario.setUsername(cuentaUsuarioForm.getNewUsername());
+        cuentaUsuario.setPassword(cuentaUsuarioForm.getNewPassword());
 
         return cuentaUsuario;
     }
