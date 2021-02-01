@@ -1,11 +1,9 @@
 package com.tfg.pmh.controllers;
 
 import com.tfg.pmh.forms.CuentaUsuarioForm;
-import com.tfg.pmh.forms.HabitanteForm;
 import com.tfg.pmh.models.CuentaUsuario;
 import com.tfg.pmh.models.Habitante;
 import com.tfg.pmh.models.Respuesta;
-import com.tfg.pmh.repositories.CuentaUsuarioRepository;
 import com.tfg.pmh.services.CuentaUsuarioService;
 import com.tfg.pmh.services.HabitanteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,10 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/habitante")
@@ -80,6 +81,12 @@ public class HabitanteController {
         cuentaUsuarioService.save(cs);
 
         return new Respuesta(200, habitanteService.findByUsername(cuentaUsuario.getNewUsername()));
+    }
+
+    @GetMapping("/convivientes")
+    public List<Habitante> convivientes(String vivienda, Integer numero) {
+        System.out.println(numero);
+        return new ArrayList<>(this.habitanteService.findConvivientes(vivienda, numero));
     }
 
 

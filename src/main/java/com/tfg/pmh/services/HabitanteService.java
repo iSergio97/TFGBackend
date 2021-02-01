@@ -40,4 +40,9 @@ public class HabitanteService {
         return this.repository.findByUsername(username);
     }
 
+    // Búsqueda exacta
+    public Collection<Habitante> findConvivientes(String nombreCalle, Integer numero) {
+        return this.repository.findConvivientes(nombreCalle, numero);
+    }
+
 }

@@ -4,7 +4,6 @@ import com.tfg.pmh.models.*;
 import com.tfg.pmh.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -221,6 +220,7 @@ public class SistemaController {
                 vivienda.setPais("ESPAÑA");
                 vivienda.setProvincia("SEVILLA");
                 vivienda.setMunicipio("ÉCIJA");
+                vivienda.setNumero(calle);
                 viviendaService.save(vivienda);
 
                 habitante.setVivienda(vivienda);
