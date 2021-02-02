@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class HabitanteService {
@@ -41,8 +42,8 @@ public class HabitanteService {
     }
 
     // Búsqueda exacta
-    public Collection<Habitante> findConvivientes(String nombreCalle, Integer numero) {
-        return this.repository.findConvivientes(nombreCalle, numero);
+    public List<Habitante> findConvivientes(String nombreCalle, Integer numero, Long idHab) {
+        return this.repository.findConvivientes(nombreCalle, numero, idHab);
     }
 
 }

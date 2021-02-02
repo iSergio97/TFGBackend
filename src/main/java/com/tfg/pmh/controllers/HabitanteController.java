@@ -68,7 +68,7 @@ public class HabitanteController {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        String newPassword = cuentaUsuario.getNewPassword() + userAccount.getSalt();
+        String newPassword = cuentaUsuario.getCurrentPassword() + userAccount.getSalt();
 
         if(!encoder.matches(newPassword, userPassword)) {
             return new Respuesta(370, null); // Error de contraseña
@@ -84,9 +84,18 @@ public class HabitanteController {
     }
 
     @GetMapping("/convivientes")
-    public List<Habitante> convivientes(String vivienda, Integer numero) {
-        System.out.println(numero);
-        return new ArrayList<>(this.habitanteService.findConvivientes(vivienda, numero));
+    public List<String> convivientes(String vivienda, Integer numero, Long id) {
+        List<Habitante> habitantes = this.habitanteService.findConvivientes(vivienda, numero, id);
+        List<String> ls = new ArrayList<>();
+        for(Habitante h : habitantes) {
+            String builder = h.getPrimerApellido() +
+                    ", " +
+                    h.getSegundoApellido() +
+                    ", " +
+                    h.getNombre();
+            ls.add(builder);
+        }
+        return ls;
     }
 
 
