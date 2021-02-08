@@ -35,8 +35,9 @@ public class Solicitud {
 
     private String justificacion;
 
+    // El estado puede ser pendiente (P), aceptada (A), rechazada (R) y cancelada (C)
     @NotBlank
-    @Pattern(regexp = "^[PAR]$")
+    @Pattern(regexp = "^[PARC]$")
     private String estado;
 
     // Sólo para menores de edad que lo quieran añadir o para personas con tarjeta identificativa

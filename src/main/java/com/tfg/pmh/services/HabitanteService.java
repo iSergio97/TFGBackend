@@ -46,4 +46,8 @@ public class HabitanteService {
         return this.repository.findConvivientes(nombreCalle, numero, idHab);
     }
 
+    public List<Habitante> findAll() {
+        return this.repository.findAll();
+    }
+
 }

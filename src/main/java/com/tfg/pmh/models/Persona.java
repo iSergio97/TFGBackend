@@ -22,12 +22,8 @@ public abstract class Persona {
 	@NotBlank
 	private String nombre;
 
-	private String particulaPrimerApellido;
-
 	@NotBlank
 	private String primerApellido;
-
-	private String particulaSegundoApellido;
 
 	@NotBlank
 	private String segundoApellido;

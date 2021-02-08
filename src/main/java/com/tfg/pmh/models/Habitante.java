@@ -36,8 +36,7 @@ public class Habitante extends Persona {
     @Valid
     @ManyToOne
     private Identificador tarjetaIdentificacion;
-
-    // @NotBlank
+    
     @Column(unique = true)
     private String identificacion;
 }
