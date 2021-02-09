@@ -84,18 +84,9 @@ public class HabitanteController {
     }
 
     @GetMapping("/convivientes")
-    public List<String> convivientes(String vivienda, Integer numero, Long id) {
-        List<Habitante> habitantes = this.habitanteService.findConvivientes(vivienda, numero, id);
-        List<String> ls = new ArrayList<>();
-        for(Habitante h : habitantes) {
-            String builder = h.getPrimerApellido() +
-                    ", " +
-                    h.getSegundoApellido() +
-                    ", " +
-                    h.getNombre();
-            ls.add(builder);
-        }
-        return ls;
+    public List<Habitante> convivientes(String vivienda, Integer numero, Long id) {
+        return this.habitanteService.findConvivientes(vivienda, numero, id);
+
     }
 
 

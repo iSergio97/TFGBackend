@@ -35,7 +35,6 @@ public class Operacion {
     @ManyToOne
     private Habitante habitante;
 
-    // Si la operación es de alta por nacimiento, la vivienda origen puede ser nula
     @Valid
     @ManyToOne
     private Vivienda viviendaOrigen;
