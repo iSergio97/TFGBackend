@@ -34,7 +34,10 @@ public class SolicitudForm {
     private String nombre;
 
     @NotBlank
-    private String apellidos;
+    private String primerApellido;
+
+    @NotBlank
+    private String segundoApellido;
 
     @NotBlank
     private String pais;
@@ -54,4 +57,9 @@ public class SolicitudForm {
     @Past
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     private Date fechaNacimiento;
+
+    // Campos para el alta de usuario
+    private String username;
+
+    private String password;
 }

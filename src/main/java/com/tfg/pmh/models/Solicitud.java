@@ -49,7 +49,10 @@ public class Solicitud {
     private String nombre;
 
     @NotBlank
-    private String apellidos;
+    private String primerApellido;
+
+    @NotBlank
+    private String segundoApellido;
 
     @ManyToOne
     private Vivienda viviendaNueva;

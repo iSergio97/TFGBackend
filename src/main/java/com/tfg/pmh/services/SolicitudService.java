@@ -44,7 +44,8 @@ public class SolicitudService {
         solicitud.setSolicitaPor(this.habitanteService.findById(solicitudForm.getSolicitaPorID()));
         solicitud.setIdentificacion(solicitudForm.getIdentificacion());
         solicitud.setNombre(solicitudForm.getNombre());
-        solicitud.setApellidos(solicitudForm.getApellidos());
+        solicitud.setPrimerApellido(solicitudForm.getPrimerApellido());
+        solicitud.setSegundoApellido(solicitudForm.getSegundoApellido());
         solicitud.setViviendaNueva(viviendaService.findViviendasByCalleYNumero(solicitudForm.getCalle(), solicitudForm.getNumero()));
         solicitud.setFecha(solicitudForm.getFechaNacimiento());
 
