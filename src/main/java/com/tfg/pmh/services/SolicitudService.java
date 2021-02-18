@@ -39,6 +39,9 @@ public class SolicitudService {
     public Solicitud deconstruct(SolicitudForm solicitudForm) {
 
         Solicitud solicitud = new Solicitud();
+
+        solicitud.setTipo(solicitudForm.getTipo());
+        solicitud.setSubtipo(solicitudForm.getSubtipo());
         solicitud.setFecha(new Date());
         solicitud.setSolicitante(this.habitanteService.findById(solicitudForm.getSolicitanteID()));
         solicitud.setSolicitaPor(this.habitanteService.findById(solicitudForm.getSolicitaPorID()));

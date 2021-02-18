@@ -80,7 +80,7 @@ public class HabitanteController {
 
         cuentaUsuarioService.save(cs);
 
-        return new Respuesta(200, habitanteService.findByUsername(cuentaUsuario.getNewUsername()));
+        return new Respuesta(200, null);
     }
 
     @GetMapping("/convivientes")

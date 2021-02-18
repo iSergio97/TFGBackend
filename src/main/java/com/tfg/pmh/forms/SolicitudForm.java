@@ -21,6 +21,12 @@ import java.util.Date;
 @Setter
 public class SolicitudForm {
 
+    @Pattern(regexp = "^[ABM]$")
+    private String tipo;
+
+    @Pattern(regexp = "^(AN|AO|ACD|BD|BCD|MV|MD)$")
+    private String subtipo;
+
     @NotNull
     private Long solicitanteID;
 

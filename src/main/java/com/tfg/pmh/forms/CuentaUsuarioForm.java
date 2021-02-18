@@ -21,8 +21,8 @@ public class CuentaUsuarioForm {
     private String newUsername;
 
     @NotBlank
-    private String newPassword;
+    private String currentPassword;
 
     @NotBlank
-    private String currentPassword;
+    private String newPassword;
 }

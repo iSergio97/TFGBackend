@@ -35,6 +35,13 @@ public class Solicitud {
 
     private String justificacion;
 
+    @Pattern(regexp = "^[ABM]$")
+    private String tipo;
+
+    @Pattern(regexp = "^(AN|AO|ACD|BD|BCD|MV|MD)$")
+    @NotBlank
+    private String subtipo;
+
     // El estado puede ser pendiente (P), aceptada (A), rechazada (R) y cancelada (C)
     @NotBlank
     @Pattern(regexp = "^[PARC]$")
