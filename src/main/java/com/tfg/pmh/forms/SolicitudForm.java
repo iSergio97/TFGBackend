@@ -32,6 +32,8 @@ public class SolicitudForm {
 
     @NotNull
     private Long solicitaPorID; // Campo añadido para la modificación de datos de menores por sus padres
+
+    private Boolean aceptadoPorSolicitado; // Indica si la persona que solicita la operación la acepta o no. Necesaria para menores de edad
     
     @NotBlank
     private String identificacion;
@@ -44,6 +46,8 @@ public class SolicitudForm {
 
     @NotBlank
     private String segundoApellido;
+
+    private Long viviendaId; // Nullable si se da de baja
 
     @NotBlank
     private String pais;

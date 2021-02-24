@@ -47,25 +47,31 @@ public class SistemaController {
             2 - Pasaporte
             3 - Tarjeta de extranjería
          */
+        List<Identificador> lsIdentificador = new ArrayList<>();
+
         Identificador menor = new Identificador();
         menor.setCodigoTarjeta(0);
         menor.setNombreTarjeta("Menor de edad");
         identificadorService.save(menor);
+        lsIdentificador.add(menor);
 
         menor = new Identificador();
         menor.setCodigoTarjeta(1);
         menor.setNombreTarjeta("NIF");
         identificadorService.save(menor);
+        lsIdentificador.add(menor);
 
         menor = new Identificador();
         menor.setCodigoTarjeta(2);
         menor.setNombreTarjeta("Pasaporte");
         identificadorService.save(menor);
+        lsIdentificador.add(menor);
 
         menor = new Identificador();
         menor.setCodigoTarjeta(3);
         menor.setNombreTarjeta("Tarjeta de extranjería");
         identificadorService.save(menor);
+        lsIdentificador.add(menor);
         // Creamos las cuentas de usuario de administradores primero y los guardamos en la base de datos
         adminUA();
         // Tras ello, creamos a 100 habitantes
@@ -210,7 +216,7 @@ public class SistemaController {
                 habitante.setFechaNacimiento(fechaNacimiento.getTime());
                 habitante.setNacionalidad("ESPAÑA");
 
-                int tarjeta = random.nextInt(5);
+                int tarjeta = random.nextInt(4);
                 identificador = this.identificadorService.findById((long) tarjeta);
                 habitante.setTarjetaIdentificacion(identificador);
                 habitante.setSexo(tarjeta % 2 == 0 ? "H" : "M");

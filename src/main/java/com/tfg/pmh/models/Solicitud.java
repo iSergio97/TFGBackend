@@ -33,6 +33,8 @@ public class Solicitud {
     @ManyToOne
     private Habitante solicitaPor; // Campo añadido para la modificación de datos de menores por sus padres
 
+    private Boolean aceptadoPorSolicitado;
+
     private String justificacion;
 
     @Pattern(regexp = "^[ABM]$")

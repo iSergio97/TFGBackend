@@ -85,7 +85,9 @@ public class HabitanteController {
 
     @GetMapping("/convivientes")
     public List<Habitante> convivientes(String vivienda, Integer numero, Long id) {
-        return this.habitanteService.findConvivientes(vivienda, numero, id);
+        List<Habitante> ls = new ArrayList<>();
+        System.out.println(this.habitanteService.findConvivientes(vivienda, numero, id));
+        return ls;
 
     }
 
