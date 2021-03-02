@@ -36,4 +36,8 @@ public class AdministradorService {
     public Collection<Administrador> findAll() {
         return this.repository.findAll();
     }
+
+    public Administrador findByUsername(String username) {
+        return this.repository.findByUsername(username);
+    }
 }

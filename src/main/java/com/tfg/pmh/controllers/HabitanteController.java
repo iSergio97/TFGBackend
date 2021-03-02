@@ -33,7 +33,7 @@ public class HabitanteController {
     private Respuesta login(String username, String password) {
         Respuesta res = null;
         try {
-            if("".equals(username) || "".equals(password)){
+            if("".equals(username) || "".equals(password) || null == username || null == password){
                 return new Respuesta(350, null);
             }
             Habitante habitante = habitanteService.findByUsername(username);

@@ -4,6 +4,8 @@ import com.tfg.pmh.models.*;
 import com.tfg.pmh.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +15,8 @@ import java.security.SecureRandom;
 import java.util.*;
 
 @RestController
-@RequestMapping("/sistema/administrador/")
+@RequestMapping("/sistema/administrador")
+@CrossOrigin(origins = {"*"})
 public class SistemaController {
 
     @Autowired
@@ -31,13 +34,13 @@ public class SistemaController {
     @Autowired
     private ViviendaService viviendaService;
 
-    @GetMapping("info")
+    @GetMapping("/info")
     public List<Integer> systemInfo() {
         // Puede que interese crear un objeto Info, no persistente, para almacenar estas cosas
         return new ArrayList<>();
     }
 
-    @GetMapping("poblate")
+    @GetMapping("/poblate")
     public Integer poblate() throws NoSuchAlgorithmException {
 
         //Creamos las tarjeta de identificación
@@ -292,5 +295,28 @@ public class SistemaController {
         }
 
         return 200;
+    }
+
+    @GetMapping("/login")
+    private Respuesta login(String username, String password) {
+        Respuesta res = null;
+        try {
+            if("".equals(username) || "".equals(password) || null == username || null == password){
+                return new Respuesta(350, null);
+            }
+            Administrador admin = administradorService.findByUsername(username);
+            Assert.notNull(admin);
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            if(encoder.matches(password + admin.getCuentaUsuario().getSalt(), admin.getCuentaUsuario().getPassword())) {
+                res = new Respuesta(200, admin);
+            } else{
+                res = new Respuesta(350, null);
+            }
+        } catch (Exception e) {
+            // Excepción controlada
+            res = new Respuesta(350, null);
+        }
+
+        return res;
     }
 }
