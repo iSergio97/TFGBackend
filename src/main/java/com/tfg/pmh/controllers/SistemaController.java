@@ -34,6 +34,12 @@ public class SistemaController {
     @Autowired
     private ViviendaService viviendaService;
 
+    @Autowired
+    private OperacionService operacionService;
+
+    @Autowired
+    private SolicitudService solicitudService;
+
     @GetMapping("/info")
     public List<Integer> systemInfo() {
         // Puede que interese crear un objeto Info, no persistente, para almacenar estas cosas
@@ -318,5 +324,107 @@ public class SistemaController {
         }
 
         return res;
+    }
+
+    @GetMapping("/prueba")
+    public Respuesta pruebaMultiobjeto() {
+        Map<String, Object> ls = new HashMap<>();
+        ls.put("Cadena de texto", "A");
+        ls.put("Número", 333);
+        ls.put("habitante", this.administradorService.findByUsername("sergio"));
+
+        return new Respuesta(200, ls);
+    }
+
+    @GetMapping("/habitantes/count")
+    public Respuesta numHabitantes() {
+        return new Respuesta(200, this.habitanteService.findAll().size());
+    }
+
+    @GetMapping("/habitantes/filter/dates")
+    public Respuesta habitantesPorFechas(Date fechaFrom, Date fechaTo) {
+        // Si la fecha hasta es nula, se toma como fecha tope, la fecha de ahora
+        if(fechaTo == null) {
+            fechaTo = new Date();
+        }
+        return null;
+    }
+
+    // TODO: Corregir problema se crean solicitudes pero el tipo y el subtipo no son del mismo grupo
+    @GetMapping("/operaciones/create")
+    public Integer newOperaciones() {
+        List<String> tipos = new ArrayList<>();
+        tipos.add("A");
+        tipos.add("B");
+        tipos.add("M");
+        List<String> altas = new ArrayList<>();
+        altas.add("AO");
+        altas.add("AN");
+        altas.add("ACR");
+
+        List<String> bajas = new ArrayList<>();
+        bajas.add("BCD"); // Baja por cambio de domicilio
+        bajas.add("BD"); // Baja por defunción
+
+        List<String> modificaciones = new ArrayList<>();
+        modificaciones.add("MDP");
+        modificaciones.add("MV");
+
+
+        List<Habitante> habitantes = this.habitanteService.findAll();
+        Operacion op;
+        for(int i = 0; i < 100; i++) {
+            int opcion = (int) (Math.random() * (3));
+            if(opcion > 2) {
+                opcion = 2;
+            }
+            int subOpcion = (int) (Math.random() * (3));
+            if(opcion != 1 && subOpcion > opcion) {
+                subOpcion = 0;
+            }
+            int habEscogido = (int) (Math.random() * habitantes.size());
+            if(habEscogido > habitantes.size()) {
+                habEscogido = (int) (habEscogido/2);
+            }
+            Habitante habitanteElegido = habitantes.get(habEscogido);
+            habitantes.remove(habitanteElegido);
+            op = new Operacion();
+            op.setHabitante(habitanteElegido);
+            op.setTipo(tipos.get(opcion));
+            op.setSubtipo(subOpcion == 0 ?  altas.get(subOpcion) : (subOpcion == 1 ? bajas.get(subOpcion) : modificaciones.get(subOpcion)));
+            Solicitud solicitud = new Solicitud();
+            solicitud.setTipo(tipos.get(opcion));
+            solicitud.setSubtipo(subOpcion == 0 ?  altas.get(subOpcion) : (subOpcion == 1 ? bajas.get(subOpcion) : modificaciones.get(subOpcion)));
+            solicitud.setSolicitante(habitanteElegido);
+            solicitud.setEstado("A");
+            solicitud.setNombre(habitanteElegido.getNombre());
+            solicitud.setPrimerApellido(habitanteElegido.getPrimerApellido());
+            solicitud.setSegundoApellido(habitanteElegido.getSegundoApellido());
+            solicitud.setIdentificacion(habitanteElegido.getIdentificacion());
+            solicitud.setViviendaNueva(habitanteElegido.getVivienda());
+            solicitud.setIdentificacion(habitanteElegido.getIdentificacion());
+            solicitud.setFechaNacimiento(habitanteElegido.getFechaNacimiento());
+            this.solicitudService.save(solicitud);
+            op.setSolicitud(solicitud);
+            op.setFechaOperacion(new Date());
+            op.setViviendaOrigen(habitanteElegido.getVivienda());
+            op.setViviendaDestino(habitanteElegido.getVivienda());
+        }
+        return 200;
+    }
+
+    @GetMapping("/habitantes/filter/alta")
+    public List<Integer> habitantesConOPsAlta() {
+        return this.operacionService.estadisticasHabsAlta();
+    }
+
+    @GetMapping("/habitantes/filter/baja")
+    public List<Integer> habitantesConOPsBaja() {
+        return this.operacionService.estadisticasHabsBaja();
+    }
+
+    @GetMapping("/habitantes/filter/modificacion")
+    public List<Integer> habitantesConOPsModificacion() {
+        return this.operacionService.estadisticasHabsModificacion();
     }
 }

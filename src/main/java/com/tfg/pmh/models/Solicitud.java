@@ -33,11 +33,10 @@ public class Solicitud {
     @ManyToOne
     private Habitante solicitaPor; // Campo añadido para la modificación de datos de menores por sus padres
 
-    private Boolean aceptadoPorSolicitado;
-
     private String justificacion;
 
     @Pattern(regexp = "^[ABM]$")
+    @NotBlank
     private String tipo;
 
     @Pattern(regexp = "^(AN|AO|ACD|BD|BCD|MV|MD)$")
@@ -50,7 +49,6 @@ public class Solicitud {
     private String estado;
 
     // Sólo para menores de edad que lo quieran añadir o para personas con tarjeta identificativa
-    @NotBlank
     @Pattern(regexp = "^(\\d{8}\\w)|(\\d{7}[XYZ])$")
     private String identificacion;
 

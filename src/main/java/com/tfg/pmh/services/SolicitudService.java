@@ -71,8 +71,6 @@ public class SolicitudService {
         int day = solicitudForm.getFechaNacimiento().getDate();
 
         LocalDate birthDay = LocalDate.of(anho, month, day);
-        Boolean aceptadoPorSolicitado = Period.between(birthDay, LocalDate.now()).getYears() > 18;
-        solicitud.setAceptadoPorSolicitado(aceptadoPorSolicitado);
         solicitud.setFechaNacimiento(solicitudForm.getFechaNacimiento());
 
         return solicitud;
