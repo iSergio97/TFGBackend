@@ -66,8 +66,8 @@ public class OperacionService {
         return ls;
     }
 
-    public Integer getHabsByMDP() {
-        return this.repository.getHabsModificacionPorSubtipo("AO");
+    public Integer getHabsByMV() {
+        return this.repository.getHabsModificacionPorSubtipo("MV");
     }
 
     public Integer getHabsByMD() {
@@ -76,8 +76,8 @@ public class OperacionService {
 
     public List<Integer> estadisticasHabsModificacion() {
         List<Integer> ls = new ArrayList<>();
-        ls.add(this.getHabsByMDP());
         ls.add(this.getHabsByMD());
+        ls.add(this.getHabsByMV());
 
         return ls;
     }

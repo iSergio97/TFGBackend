@@ -39,7 +39,7 @@ public class Solicitud {
     @NotBlank
     private String tipo;
 
-    @Pattern(regexp = "^(AN|AO|ACD|BD|BCD|MV|MD)$")
+    @Pattern(regexp = "^(AN|AO|ACR|BD|BCD|MV|MD)$")
     @NotBlank
     private String subtipo;
 

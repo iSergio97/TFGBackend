@@ -367,7 +367,7 @@ public class SistemaController {
         bajas.add("BD"); // Baja por defunción
 
         List<String> modificaciones = new ArrayList<>();
-        modificaciones.add("MDP");
+        modificaciones.add("MD");
         modificaciones.add("MV");
 
 
@@ -378,23 +378,23 @@ public class SistemaController {
             if(opcion > 2) {
                 opcion = 2;
             }
-            int subOpcion = (int) (Math.random() * (3));
-            if(opcion != 1 && subOpcion > opcion) {
-                subOpcion = 0;
+            int range = 2;
+            if(opcion == 0) {
+                range = 3;
             }
+            int subOpcion = (int) (Math.random() * (range));
+
             int habEscogido = (int) (Math.random() * habitantes.size());
-            if(habEscogido > habitantes.size()) {
-                habEscogido = (int) (habEscogido/2);
-            }
+
             Habitante habitanteElegido = habitantes.get(habEscogido);
             habitantes.remove(habitanteElegido);
             op = new Operacion();
             op.setHabitante(habitanteElegido);
             op.setTipo(tipos.get(opcion));
-            op.setSubtipo(subOpcion == 0 ?  altas.get(subOpcion) : (subOpcion == 1 ? bajas.get(subOpcion) : modificaciones.get(subOpcion)));
+            op.setSubtipo(opcion == 0 ?  altas.get(subOpcion) : (opcion == 1 ? bajas.get(subOpcion) : modificaciones.get(subOpcion)));
             Solicitud solicitud = new Solicitud();
-            solicitud.setTipo(tipos.get(opcion));
-            solicitud.setSubtipo(subOpcion == 0 ?  altas.get(subOpcion) : (subOpcion == 1 ? bajas.get(subOpcion) : modificaciones.get(subOpcion)));
+            solicitud.setTipo(op.getTipo());
+            solicitud.setSubtipo(op.getSubtipo());
             solicitud.setSolicitante(habitanteElegido);
             solicitud.setEstado("A");
             solicitud.setNombre(habitanteElegido.getNombre());
@@ -404,11 +404,13 @@ public class SistemaController {
             solicitud.setViviendaNueva(habitanteElegido.getVivienda());
             solicitud.setIdentificacion(habitanteElegido.getIdentificacion());
             solicitud.setFechaNacimiento(habitanteElegido.getFechaNacimiento());
+            System.out.println(op.getTipo() + ", " + op.getSubtipo());
             this.solicitudService.save(solicitud);
             op.setSolicitud(solicitud);
             op.setFechaOperacion(new Date());
             op.setViviendaOrigen(habitanteElegido.getVivienda());
             op.setViviendaDestino(habitanteElegido.getVivienda());
+            this.operacionService.save(op);
         }
         return 200;
     }
