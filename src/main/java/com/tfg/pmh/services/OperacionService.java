@@ -25,6 +25,8 @@ public class OperacionService {
         return this.repository.findById(id).orElse(null);
     }
 
+    public List<Operacion> findAll() { return this.repository.findAll(); }
+
     public Collection<Operacion> findOpsByHabitanteId(Long id) {
         return null;
     }

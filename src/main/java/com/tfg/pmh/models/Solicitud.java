@@ -45,7 +45,7 @@ public class Solicitud {
 
     // El estado puede ser pendiente (P), aceptada (A), rechazada (R) y cancelada (C)
     @NotBlank
-    @Pattern(regexp = "^[PARC]$")
+    @Pattern(regexp = "^[AR]$") // TODO: REPOBLAR TODO PARA ELIMINAR LAS OPCIONES DE PENDIENTE O CANCELADO, YA QUE UNA OPERACIÓN SE PRODUCE A RAÍZ DE UNA SOLICITUD
     private String estado;
 
     // Sólo para menores de edad que lo quieran añadir o para personas con tarjeta identificativa

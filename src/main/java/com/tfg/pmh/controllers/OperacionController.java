@@ -2,12 +2,11 @@ package com.tfg.pmh.controllers;
 
 import com.tfg.pmh.models.Habitante;
 import com.tfg.pmh.models.Operacion;
+import com.tfg.pmh.models.Respuesta;
 import com.tfg.pmh.services.HabitanteService;
 import com.tfg.pmh.services.OperacionService;
 import com.tfg.pmh.services.ViviendaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -31,23 +30,18 @@ public class OperacionController {
     @Autowired
     private ViviendaService viviendaService;
 
-    /**
-     @param operacion
-     @param cookieSession
-     @return ResponseEntity
-     */
-    @PostMapping("new")
-    public ResponseEntity<Operacion> newOperacion(@ModelAttribute("operacion") Operacion operacion, String cookieSession) {
-        try {
-            Habitante habitante = habitanteService.findByUsername(cookieSession);
-            operacion.setFechaOperacion(new Date(System.currentTimeMillis() - 1));
-            operacion.setHabitante(habitante);
-            this.operacionService.save(operacion);
+    @GetMapping("list")
+    public Respuesta listaOperaciones() {
+        Respuesta res = new Respuesta(400, null);
 
+        try {
+            List<Operacion> lista = this.operacionService.findAll();
+            res.setObject(lista);
+            res.setStatus(200);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            // EXCEPCIÓN CONTROLADA
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return res;
     }
 }
