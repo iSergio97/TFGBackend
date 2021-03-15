@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Document {
+public class Documento {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

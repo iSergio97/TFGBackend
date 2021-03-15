@@ -1,24 +1,23 @@
 package com.tfg.pmh.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tfg.pmh.forms.SolicitudForm;
-import com.tfg.pmh.models.Document;
-import com.tfg.pmh.models.Habitante;
+import com.tfg.pmh.models.Documento;
 import com.tfg.pmh.models.Respuesta;
 import com.tfg.pmh.models.Solicitud;
-import com.tfg.pmh.services.DocumentService;
+import com.tfg.pmh.services.DocumentoService;
 import com.tfg.pmh.services.HabitanteService;
 import com.tfg.pmh.services.SolicitudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.annotation.MultipartConfig;
+import javax.swing.text.Document;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,28 +32,18 @@ public class SolicitudController {
     private SolicitudService service;
 
     @Autowired
-    private DocumentService documentService;
+    private DocumentoService documentService;
     // Métodos para los habitantes
 
     // Documentos: https://www.youtube.com/watch?v=znjhY71F-8I
     @PostMapping("/habitante/new")
-    public Respuesta prueba(@RequestBody SolicitudForm solicitud) {
-        Respuesta respuesta = new Respuesta();
-        // Revisar qué status pondremos para BadRequest en el parámetro
-        respuesta.setStatus(350);
-        try {
-            Solicitud solicitudBD = this.service.deconstruct(solicitud);
+    public Respuesta nuevaSolicitud(@RequestBody Solicitud solicitud){
 
-            // Error a la hora de guardar. Revisar mañana
-            this.service.save(solicitudBD);
-            respuesta.setObject(solicitudBD);
-            respuesta.setStatus(200);
-            return respuesta;
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            System.err.println(e.getCause());
-            return respuesta;
-        }
+        System.out.println(solicitud.getEstado());
+
+        System.out.println(solicitud.getFecha());
+
+        return new Respuesta(200, null);
     }
 
     @GetMapping("/h")
@@ -63,13 +52,13 @@ public class SolicitudController {
     }
 
     @PostMapping(value= "/document", consumes = {"multipart/form-data"})
-    public ResponseEntity<Document> uploadFile(@RequestParam("file") MultipartFile file, String name) {
+    public ResponseEntity<Documento> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-            Document document = new Document();
+            Documento document = new Documento();
 
-            document.setName(name);
+            document.setName(file.getOriginalFilename());
             document.setData(file.getBytes());
-            System.out.println(name);
+            System.out.println(document.getName());
             this.documentService.save(document);
             return new ResponseEntity<>(document, HttpStatus.OK);
         } catch (IOException e) {
@@ -81,7 +70,7 @@ public class SolicitudController {
 
     @GetMapping(value= "/document")
     public ResponseEntity<byte[]> downloadFile(Long id) {
-        Document doc = this.documentService.findById(id);
+        Documento doc = this.documentService.findById(id);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + doc.getName() + "\"")

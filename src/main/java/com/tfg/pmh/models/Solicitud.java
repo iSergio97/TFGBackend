@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -61,10 +62,22 @@ public class Solicitud {
     @NotBlank
     private String segundoApellido;
 
-    @ManyToOne
-    private Vivienda viviendaNueva;
+    private String pais;
+
+    private String provincia;
+
+    private String municipio;
+
+    private String calle;
+
+    private Integer numero;
+
 
     @Past
     private Date fechaNacimiento;
+
+    @Valid
+    @OneToMany
+    private List<Documento> documentos;
     
 }

@@ -401,7 +401,6 @@ public class SistemaController {
             solicitud.setPrimerApellido(habitanteElegido.getPrimerApellido());
             solicitud.setSegundoApellido(habitanteElegido.getSegundoApellido());
             solicitud.setIdentificacion(habitanteElegido.getIdentificacion());
-            solicitud.setViviendaNueva(habitanteElegido.getVivienda());
             solicitud.setIdentificacion(habitanteElegido.getIdentificacion());
             solicitud.setFechaNacimiento(habitanteElegido.getFechaNacimiento());
             System.out.println(op.getTipo() + ", " + op.getSubtipo());

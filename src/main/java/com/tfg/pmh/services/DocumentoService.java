@@ -1,23 +1,21 @@
 package com.tfg.pmh.services;
 
-import com.tfg.pmh.models.Document;
-import com.tfg.pmh.repositories.DocumentRepository;
+import com.tfg.pmh.models.Documento;
+import com.tfg.pmh.repositories.DocumentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
-
 @Service
-public class DocumentService {
+public class DocumentoService {
 
     @Autowired
-    private DocumentRepository repository;
+    private DocumentoRepository repository;
 
-    public Document save(Document doc) {
+    public Documento save(Documento doc) {
         return this.repository.save(doc);
     }
 
-    public Document findById(Long id) {
+    public Documento findById(Long id) {
         return this.repository.findById(id).orElse(null);
     }
 }
