@@ -1,24 +1,23 @@
 package com.tfg.pmh.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Solicitud {
+public class Solicitud implements Serializable {
+
+    private static final long serialVersionUID = 9178661439383356177L;
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

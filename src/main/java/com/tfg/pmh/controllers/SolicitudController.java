@@ -1,7 +1,5 @@
 package com.tfg.pmh.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tfg.pmh.forms.SolicitudForm;
 import com.tfg.pmh.models.Documento;
 import com.tfg.pmh.models.Respuesta;
 import com.tfg.pmh.models.Solicitud;
@@ -15,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.Document;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/solicitud")
@@ -44,11 +39,6 @@ public class SolicitudController {
         System.out.println(solicitud.getFecha());
 
         return new Respuesta(200, null);
-    }
-
-    @GetMapping("/h")
-    public SolicitudForm test() {
-        return new SolicitudForm();
     }
 
     @PostMapping(value= "/document", consumes = {"multipart/form-data"})

@@ -1,39 +1,28 @@
 package com.tfg.pmh.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 @Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Vivienda {
+public class Vivienda implements Serializable {
+
+    private static final long serialVersionUID = 9178661439383356177L;
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @NotBlank
-    private String pais;
-
-    @NotBlank
-    private String provincia;
-
-    @NotBlank
-    private String municipio;
-
-    @NotBlank
-    private String calle;
+    @Valid
+    @ManyToOne
+    private Calle calle;
 
     @Range(min = 0)
     private Integer numero;

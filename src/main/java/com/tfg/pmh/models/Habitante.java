@@ -1,19 +1,15 @@
 package com.tfg.pmh.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.validator.constraints.UniqueElements;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Habitante extends Persona {
@@ -35,7 +31,7 @@ public class Habitante extends Persona {
 
     @Valid
     @ManyToOne
-    private Identificador tarjetaIdentificacion;
+    private Identificacion tarjetaIdentificacion;
     
     @Column(unique = true)
     private String identificacion;

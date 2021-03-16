@@ -7,17 +7,20 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 
+import java.io.Serializable;
 import java.util.Date;
 
 //@Inheritance
 @MappedSuperclass
-@Getter
-@Setter
-public abstract class Persona {
+@Data
+public abstract class Persona implements Serializable {
+
+	private static final long serialVersionUID = 9178661439383356177L;
 
 	@NotBlank
 	private String nombre;

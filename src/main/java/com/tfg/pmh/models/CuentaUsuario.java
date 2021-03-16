@@ -1,20 +1,19 @@
 package com.tfg.pmh.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 @Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CuentaUsuario {
+public class CuentaUsuario implements Serializable {
+
+    private static final long serialVersionUID = 9178661439383356177L;
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
