@@ -31,7 +31,7 @@ public class Solicitud implements Serializable {
     private Habitante solicitante;
 
     @ManyToOne
-    private Habitante solicitaPor; // Campo añadido para la modificación de datos de menores por sus padres
+    private Habitante solicitaPor; // TODO: TIRAR COLUMNA EN LA SIGUIENTE REPOBLACIÓN
 
     private String justificacion;
 
@@ -45,7 +45,7 @@ public class Solicitud implements Serializable {
 
     // El estado puede ser pendiente (P), aceptada (A), rechazada (R) y cancelada (C)
     @NotBlank
-    @Pattern(regexp = "^[AR]$") // TODO: REPOBLAR TODO PARA ELIMINAR LAS OPCIONES DE PENDIENTE O CANCELADO, YA QUE UNA OPERACIÓN SE PRODUCE A RAÍZ DE UNA SOLICITUD
+    @Pattern(regexp = "^[ACRP]$") // TODO: REPOBLAR TODO PARA ELIMINAR LAS OPCIONES DE PENDIENTE O CANCELADO, YA QUE UNA OPERACIÓN SE PRODUCE A RAÍZ DE UNA SOLICITUD
     private String estado;
 
     // Sólo para menores de edad que lo quieran añadir o para personas con tarjeta identificativa

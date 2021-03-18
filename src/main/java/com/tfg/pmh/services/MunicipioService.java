@@ -26,6 +26,6 @@ public class MunicipioService {
     }
 
     public List<Municipio> findMunicipiosByProvinciaId(Long id) {
-        return this.repository.findMunicipioByPaisId(id);
+        return this.repository.findMunicipioByProvinciaId(id);
     }
 }

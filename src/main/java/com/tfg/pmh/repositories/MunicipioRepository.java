@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface MunicipioRepository extends JpaRepository<Municipio, Long> {
 
-    List<Municipio> findMunicipioByPaisId(Long id);
+    List<Municipio> findMunicipioByProvinciaId(Long id);
 }

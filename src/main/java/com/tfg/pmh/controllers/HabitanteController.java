@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/habitante")
@@ -27,8 +28,8 @@ public class HabitanteController {
     private CuentaUsuarioService cuentaUsuarioService;
 
     // Documentar método
-    @GetMapping("/login")
-    private Respuesta login(String username, String password) {
+    @PostMapping("/login")
+    private Respuesta login(@RequestParam("username") String username, @RequestParam("password") String password) {
         Respuesta res = null;
         try {
             if("".equals(username) || "".equals(password) || null == username || null == password){
@@ -83,10 +84,7 @@ public class HabitanteController {
 
     @GetMapping("/convivientes")
     public List<Habitante> convivientes(String vivienda, Integer numero, Long id) {
-        List<Habitante> ls = new ArrayList<>();
-        System.out.println(this.habitanteService.findConvivientes(vivienda, numero, id));
-        return ls;
-
+        return new ArrayList<>();
     }
 
 

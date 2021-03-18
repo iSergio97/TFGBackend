@@ -27,6 +27,10 @@ public class HabitanteService {
         this.repository.save(habitante);
     }
 
+    public void saveAll(List<Habitante> habitantes) {
+        this.repository.saveAll(habitantes);
+    }
+
     public Habitante findById(Long id) {
         return this.repository.findById(id).orElse(null);
     }
@@ -39,11 +43,6 @@ public class HabitanteService {
 
     public Habitante findByUsername(String username) {
         return this.repository.findByUsername(username);
-    }
-
-    // Búsqueda exacta
-    public List<Habitante> findConvivientes(String nombreCalle, Integer numero, Long idHab) {
-        return this.repository.findConvivientes(nombreCalle, numero, idHab);
     }
 
     public List<Habitante> findAll() {

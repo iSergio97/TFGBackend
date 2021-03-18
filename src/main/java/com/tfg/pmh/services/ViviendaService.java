@@ -22,15 +22,4 @@ public class ViviendaService {
     public Vivienda findById(Long id) {
         return this.repository.findById(id).orElse(null);
     }
-
-    public Collection<Vivienda> findViviendasByCalle(String calle) {
-        assert calle != null;
-        return this.repository.findViviendasByCalle(calle);
-    }
-    public Vivienda findViviendasByCalleYNumero(String calle, Integer numero) {
-        assert calle != null;
-        assert numero != null;
-        return this.repository.findViviendaByCalleYNumero(calle, numero);
-    }
-
 }

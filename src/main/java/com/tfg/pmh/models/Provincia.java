@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Entity
@@ -21,4 +22,7 @@ public class Provincia implements Serializable {
     @Valid
     @ManyToOne
     private Pais pais;
+
+    @NotBlank
+    private String nombre;
 }

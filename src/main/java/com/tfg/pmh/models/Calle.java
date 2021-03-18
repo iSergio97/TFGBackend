@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Entity
@@ -24,4 +25,7 @@ public class Calle implements Serializable {
     @Valid
     @ManyToOne
     private Municipio municipio;
+
+    @NotBlank
+    private String nombre;
 }

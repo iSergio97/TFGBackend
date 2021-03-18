@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Entity
@@ -22,5 +23,8 @@ public class Municipio implements Serializable {
 
     @ManyToOne
     @Valid
-    private Pais pais;
+    private Provincia provincia;
+
+    @NotBlank
+    private String nombre;
 }

@@ -15,7 +15,4 @@ public interface HabitanteRepository extends JpaRepository<Habitante, Long> {
 
     @Query("SELECT H FROM Habitante H WHERE H.cuentaUsuario.username = ?1")
     Habitante findByUsername(String username);
-
-    @Query("SELECT H FROM Habitante H WHERE H.Vivienda.pais = 'ESPAÑA' AND H.Vivienda.provincia = 'SEVILLA' AND H.Vivienda.municipio = 'ECIJA' AND H.Vivienda.calle = ?1 AND H.Vivienda.numero = ?2 AND H.id <> ?3")
-    List<Habitante> findConvivientes(String nombreCalle, Integer numero, Long idHab);
 }
