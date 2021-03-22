@@ -35,11 +35,11 @@ public class Solicitud implements Serializable {
 
     private String justificacion;
 
-    @Pattern(regexp = "^[ABM]$")
+    @Pattern(regexp = "^[AM]$")
     @NotBlank
     private String tipo;
 
-    @Pattern(regexp = "^(AN|AO|ACR|BD|BCD|MV|MD)$")
+    @Pattern(regexp = "^(ACR|AIM|MV|MD|MRE)$")
     @NotBlank
     private String subtipo;
 

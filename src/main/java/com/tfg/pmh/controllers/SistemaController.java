@@ -332,31 +332,27 @@ public class SistemaController {
     public Integer newOperaciones() {
         List<String> tipos = new ArrayList<>();
         tipos.add("A");
-        tipos.add("B");
         tipos.add("M");
-        List<String> altas = new ArrayList<>();
-        altas.add("AO");
-        altas.add("AN");
-        altas.add("ACR");
 
-        List<String> bajas = new ArrayList<>();
-        bajas.add("BCD"); // Baja por cambio de domicilio
-        bajas.add("BD"); // Baja por defunción
+        List<String> altas = new ArrayList<>();
+        altas.add("AIM");
+        altas.add("ACR");
 
         List<String> modificaciones = new ArrayList<>();
         modificaciones.add("MD");
         modificaciones.add("MV");
+        modificaciones.add("MRE");
 
 
         List<Habitante> habitantes = this.habitanteService.findAll();
         Operacion op;
         for(int i = 0; i < 9; i++) {
-            int opcion = (int) (Math.random() * (3));
+            int opcion = (int) (Math.random() * (2));
             if(opcion > 2) {
-                opcion = 2;
+                opcion = 1;
             }
             int range = 2;
-            if(opcion == 0) {
+            if(opcion == 1) {
                 range = 3;
             }
             int subOpcion = (int) (Math.random() * (range));
@@ -368,7 +364,7 @@ public class SistemaController {
             op = new Operacion();
             op.setHabitante(habitanteElegido);
             op.setTipo(tipos.get(opcion));
-            op.setSubtipo(opcion == 0 ?  altas.get(subOpcion) : (opcion == 1 ? bajas.get(subOpcion) : modificaciones.get(subOpcion)));
+            op.setSubtipo(opcion == 0 ?  altas.get(subOpcion) : modificaciones.get(subOpcion));
             Solicitud solicitud = new Solicitud();
             solicitud.setTipo(op.getTipo());
             solicitud.setSubtipo(op.getSubtipo());
