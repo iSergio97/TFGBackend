@@ -3,9 +3,7 @@ package com.tfg.pmh.controllers;
 import com.tfg.pmh.models.Documento;
 import com.tfg.pmh.models.Respuesta;
 import com.tfg.pmh.models.Solicitud;
-import com.tfg.pmh.services.DocumentoService;
-import com.tfg.pmh.services.HabitanteService;
-import com.tfg.pmh.services.SolicitudService;
+import com.tfg.pmh.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,6 +28,10 @@ public class SolicitudController {
 
     @Autowired
     private DocumentoService documentService;
+
+
+    @Autowired
+    private ViviendaService viviendaService;
     // Métodos para los habitantes
 
     // Documentos: https://www.youtube.com/watch?v=znjhY71F-8I
@@ -76,5 +78,18 @@ public class SolicitudController {
 
     }
 
+    @GetMapping("/viviendas/all")
+    public Respuesta getAllCalles() {
+        Respuesta respuesta = new Respuesta();
+        try {
+            respuesta.setStatus(200);
+            respuesta.setObject(this.viviendaService.findAll());
+        } catch (Exception e) {
+            respuesta.setStatus(404);
+            respuesta.setObject(null);
+        }
+
+        return respuesta;
+    }
     // Métodos para los administradores
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class ViviendaService {
@@ -21,5 +22,9 @@ public class ViviendaService {
 
     public Vivienda findById(Long id) {
         return this.repository.findById(id).orElse(null);
+    }
+
+    public List<Vivienda> findAll() {
+        return this.repository.findAll();
     }
 }
