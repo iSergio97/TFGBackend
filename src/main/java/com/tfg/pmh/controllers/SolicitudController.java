@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -37,14 +38,42 @@ public class SolicitudController {
     // Documentos: https://www.youtube.com/watch?v=znjhY71F-8I
     @PostMapping("/habitante/new")
     public Respuesta nuevaSolicitud(@RequestBody Solicitud solicitud){
+        boolean res;
+        switch (solicitud.getTipo()){ // TODO: Añadir comprobación para las solicitudes de modificación
+            case "A":
+                res = validarSolicitudDatosPersonales(solicitud);
+                break;
+            case "M":
+                if("MD".equals(solicitud.getSubtipo())) {
+                    res = validarSolicitudDatosPersonales(solicitud);
+                } else {
+                    res = false;
+                }
+                break;
+            default:
+                res = false;
+                break;
+        }
+        if(res) {
+            this.service.save(solicitud);
+            return new Respuesta(200, solicitud);
+        } else {
+            return new Respuesta(400, null);
+        }
+    }
 
-        System.out.println(solicitud.getEstado());
-
-        System.out.println(solicitud.getFecha());
-
-        this.service.save(solicitud);
-
-        return new Respuesta(200, null);
+    @GetMapping("/habitante/{id}")
+    public Respuesta getSolicitud(@PathVariable Long id, @RequestParam("userId") Long userId) {
+        Solicitud solicitud = this.service.findById(id);
+        Respuesta res = new Respuesta();
+        if(solicitud != null && solicitud.getSolicitante().getId().equals(userId)) {
+            res.setObject(solicitud);
+            res.setStatus(200);
+        } else {
+            res.setObject(null);
+            res.setStatus(404);
+        }
+        return res;
     }
 
     @PostMapping(value= "/document", consumes = {"multipart/form-data"})
@@ -52,11 +81,11 @@ public class SolicitudController {
         try {
             List<Documento> documentoList = new ArrayList<>();
             Documento document;
-            for(int i = 0; i < file.length; i++) {
+            for (MultipartFile multipartFile : file) {
                 document = new Documento();
 
-                document.setName(file[i].getOriginalFilename());
-                document.setData(file[i].getBytes());
+                document.setName(multipartFile.getOriginalFilename());
+                document.setData(multipartFile.getBytes());
                 this.documentService.save(document);
                 documentoList.add(document);
             }
@@ -68,8 +97,8 @@ public class SolicitudController {
         }
     }
 
-    @GetMapping(value= "/document")
-    public ResponseEntity<byte[]> downloadFile(Long id) {
+    @GetMapping(value= "/document/{id}")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) {
         Documento doc = this.documentService.findById(id);
 
         return ResponseEntity.ok()
@@ -90,6 +119,22 @@ public class SolicitudController {
         }
 
         return respuesta;
+    }
+
+    // Métodos auxiliares para tratar las solicitudes
+
+    private boolean validarSolicitudDatosPersonales(Solicitud solicitud) {
+        boolean res = true;
+        if("".equals(solicitud.getNombre()) ||
+                "".equals(solicitud.getPrimerApellido()) ||
+                "".equals(solicitud.getSegundoApellido()) ||
+                solicitud.getFechaNacimiento().after(new Date()) ||
+                !solicitud.getSubtipo().contains(solicitud.getTipo()) ||
+                (solicitud.getTipoIdentificacion() != 0 && "".equals(solicitud.getIdentificacion())))
+        {
+            res = false;
+        }
+        return res;
     }
     // Métodos para los administradores
 }

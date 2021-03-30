@@ -4,9 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +49,10 @@ public class Solicitud implements Serializable {
     // Sólo para menores de edad que lo quieran añadir o para personas con tarjeta identificativa
     @Pattern(regexp = "^(\\d{8}\\w)|(\\d{7}[XYZ])$")
     private String identificacion;
+
+    @Min(0)
+    @Max(3)
+    private Integer tipoIdentificacion;
 
     @NotBlank
     private String nombre;
