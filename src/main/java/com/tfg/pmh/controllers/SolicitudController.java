@@ -1,8 +1,6 @@
 package com.tfg.pmh.controllers;
 
-import com.tfg.pmh.models.Documento;
-import com.tfg.pmh.models.Respuesta;
-import com.tfg.pmh.models.Solicitud;
+import com.tfg.pmh.models.*;
 import com.tfg.pmh.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +38,7 @@ public class SolicitudController {
     @PostMapping("/habitante/new")
     public Respuesta nuevaSolicitud(@RequestBody Solicitud solicitud){
         boolean res;
+        Respuesta respuesta = new Respuesta(400, null);
         switch (solicitud.getTipo()){ // TODO: Añadir comprobación para las solicitudes de modificación
             case "A":
                 res = validarSolicitudDatosPersonales(solicitud);
@@ -47,7 +47,7 @@ public class SolicitudController {
                 if("MD".equals(solicitud.getSubtipo())) {
                     res = validarSolicitudDatosPersonales(solicitud);
                 } else {
-                    res = false;
+                    res = validarSolicitudVivienda(solicitud);
                 }
                 break;
             default:
@@ -55,14 +55,18 @@ public class SolicitudController {
                 break;
         }
         if(res) {
+            if (solicitud.getDocumentos().size() == 0) {
+                // Se ha decidido rechazar directamente la solicitud por no haber adjuntado documentos.
+                solicitud.setEstado("R");
+                solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA POR NO ADJUNTAR DOCUMENTOS. SI CREE QUE ES UN ERROR DEL SISTEMA. REALICE OTRA SOLICITUD NUEVA.");
+            }
             this.service.save(solicitud);
-            return new Respuesta(200, solicitud);
-        } else {
-            return new Respuesta(400, null);
+            respuesta = new Respuesta(200, solicitud);
         }
+        return respuesta;
     }
 
-    @GetMapping("/habitante/{id}")
+    @GetMapping("/{id}")
     public Respuesta getSolicitud(@PathVariable Long id, @RequestParam("userId") Long userId) {
         Solicitud solicitud = this.service.findById(id);
         Respuesta res = new Respuesta();
@@ -76,7 +80,13 @@ public class SolicitudController {
         return res;
     }
 
-    @PostMapping(value= "/document", consumes = {"multipart/form-data"})
+    // Comprobar si es posible enviar por parámetros enviando sólo el id en la petición, una entidad
+    @PostMapping("/habitante/cancel")
+    public Respuesta cancelarSolicitud(@RequestParam("solicitudId") Long solicitudId, @RequestParam("habitante") Habitante habitante) {
+        return null;
+    }
+
+    @PostMapping(value= "/document/new", consumes = {"multipart/form-data"})
     public ResponseEntity<List<Documento>> uploadFile(@RequestParam("file") MultipartFile[] file) {
         try {
             List<Documento> documentoList = new ArrayList<>();
@@ -91,19 +101,21 @@ public class SolicitudController {
             }
             return new ResponseEntity<>(documentoList, HttpStatus.OK);
         } catch (IOException e) {
-            System.out.println(e.getCause());
-            System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping(value= "/document/{id}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable Long id, @RequestParam("requestId") Long requestId) {
         Documento doc = this.documentService.findById(id);
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + doc.getName() + "\"")
-                .body(doc.getData());
+        List<Documento> docs = this.service.findById(requestId).getDocumentos();
+        if(!docs.contains(doc)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + doc.getName() + "\"")
+                    .body(doc.getData());
+        }
 
     }
 
@@ -125,7 +137,8 @@ public class SolicitudController {
 
     private boolean validarSolicitudDatosPersonales(Solicitud solicitud) {
         boolean res = true;
-        if("".equals(solicitud.getNombre()) ||
+        if(solicitud.getSolicitante() == null ||
+                "".equals(solicitud.getNombre()) ||
                 "".equals(solicitud.getPrimerApellido()) ||
                 "".equals(solicitud.getSegundoApellido()) ||
                 solicitud.getFechaNacimiento().after(new Date()) ||
@@ -136,5 +149,31 @@ public class SolicitudController {
         }
         return res;
     }
+
+    private boolean validarSolicitudVivienda(Solicitud solicitud) {
+        boolean res = true;
+        if(!solicitud.getSubtipo().contains(solicitud.getTipo()) ||
+                solicitud.getVivienda() == null ||
+                solicitud.getSolicitante() == null)
+        {
+            res = false;
+        }
+
+        return res;
+    }
     // Métodos para los administradores
+
+    @PostMapping("/administrador/update")
+    public Respuesta updateSolicitud(@RequestParam("solicitudId") Long solicitudId, @RequestParam("estado") String estado, @RequestParam("justificacion") String justificacion, @RequestParam("admin") Administrador admin) {
+        Solicitud solicitudBD = this.service.findById(solicitudId);
+        // Si se intenta actualizar una solicitud que no está pendiente o el estado no es (A)ceptar o (R)echazar, se devuelve error de petición.
+        if(!solicitudBD.getEstado().equals("P") || !Arrays.asList("A", "R").contains(estado) || admin == null) {
+            return new Respuesta(400, null);
+        } else {
+            solicitudBD.setEstado(estado);
+            solicitudBD.setJustificacion(justificacion);
+            this.service.save(solicitudBD);
+            return new Respuesta(200, solicitudBD);
+        }
+    }
 }

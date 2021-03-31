@@ -28,9 +28,6 @@ public class Solicitud implements Serializable {
     @ManyToOne
     private Habitante solicitante;
 
-    @ManyToOne
-    private Habitante solicitaPor; // TODO: TIRAR COLUMNA EN LA SIGUIENTE REPOBLACIÓN
-
     private String justificacion;
 
     @Pattern(regexp = "^[AM]$")
@@ -43,7 +40,7 @@ public class Solicitud implements Serializable {
 
     // El estado puede ser pendiente (P), aceptada (A), rechazada (R) y cancelada (C)
     @NotBlank
-    @Pattern(regexp = "^[ACRP]$") // TODO: REPOBLAR TODO PARA ELIMINAR LAS OPCIONES DE PENDIENTE O CANCELADO, YA QUE UNA OPERACIÓN SE PRODUCE A RAÍZ DE UNA SOLICITUD
+    @Pattern(regexp = "^[ACRP]$")
     private String estado;
 
     // Sólo para menores de edad que lo quieran añadir o para personas con tarjeta identificativa
@@ -54,25 +51,15 @@ public class Solicitud implements Serializable {
     @Max(3)
     private Integer tipoIdentificacion;
 
-    @NotBlank
     private String nombre;
 
-    @NotBlank
     private String primerApellido;
 
-    @NotBlank
     private String segundoApellido;
 
-    private String pais;
-
-    private String provincia;
-
-    private String municipio;
-
-    private String calle;
-
-    private Integer numero;
-
+    @Valid
+    @ManyToOne
+    private Vivienda vivienda;
 
     @Past
     private Date fechaNacimiento;
