@@ -7,6 +7,7 @@ import com.tfg.pmh.models.Respuesta;
 import com.tfg.pmh.services.CuentaUsuarioService;
 import com.tfg.pmh.services.HabitanteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/habitante")

@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/solicitud")
@@ -108,8 +105,8 @@ public class SolicitudController {
     @GetMapping(value= "/document/{id}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable Long id, @RequestParam("requestId") Long requestId) {
         Documento doc = this.documentService.findById(id);
-        List<Documento> docs = this.service.findById(requestId).getDocumentos();
-        if(!docs.contains(doc)) {
+        Solicitud solicitud = this.service.findById(requestId);
+        if(doc == null || !Objects.requireNonNull(solicitud).getDocumentos().contains(doc)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             return ResponseEntity.ok()
