@@ -63,6 +63,20 @@ public class SolicitudController {
         return respuesta;
     }
 
+    @GetMapping("/habitante/mine")
+    public Respuesta getSolicitudesDeHab(@RequestParam("userId") Long userId) {
+        Respuesta res = new Respuesta();
+        try {
+            List<Solicitud> solicitudes = this.service.findBySolicitante(userId);
+            res.setStatus(200);
+            res.setObject(solicitudes);
+        } catch (Exception e) {
+            res.setObject(null);
+            res.setStatus(HttpStatus.BAD_REQUEST.value());
+        }
+        return res;
+    }
+
     @GetMapping("/{id}")
     public Respuesta getSolicitud(@PathVariable Long id, @RequestParam("userId") Long userId) {
         Solicitud solicitud = this.service.findById(id);

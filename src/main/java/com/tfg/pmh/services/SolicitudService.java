@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SolicitudService {
@@ -35,7 +36,7 @@ public class SolicitudService {
         return this.repository.findById(id).orElse(null);
     }
 
-    public Collection<Solicitud> findBySolicitante(Long id) {
+    public List<Solicitud> findBySolicitante(Long id) {
         return this.repository.findSolicitudesBySolicitante(id);
     }
 }
