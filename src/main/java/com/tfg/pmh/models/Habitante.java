@@ -1,5 +1,6 @@
 package com.tfg.pmh.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,8 +11,6 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Habitante extends Persona {
 
     @Id
@@ -27,10 +26,12 @@ public class Habitante extends Persona {
 
     @Valid
     @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
     private Vivienda Vivienda;
 
     @Valid
     @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
     private Identificacion tarjetaIdentificacion;
     
     @Column(unique = true)

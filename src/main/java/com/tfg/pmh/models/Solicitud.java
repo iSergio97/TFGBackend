@@ -1,5 +1,7 @@
 package com.tfg.pmh.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -47,9 +49,9 @@ public class Solicitud implements Serializable {
     @Pattern(regexp = "^(\\d{8}\\w)|(\\d{7}[XYZ])$")
     private String identificacion;
 
-    @Min(0)
-    @Max(3)
-    private Integer tipoIdentificacion;
+    @Valid
+    @ManyToOne
+    private Identificacion tipoIdentificacion;
 
     private String nombre;
 

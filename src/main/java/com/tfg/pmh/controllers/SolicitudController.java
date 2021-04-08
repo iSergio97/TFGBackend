@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
 
@@ -29,15 +30,26 @@ public class SolicitudController {
 
     @Autowired
     private ViviendaService viviendaService;
+
+    @Autowired
+    private IdentificacionService identificacionService;
     // Métodos para los habitantes
 
     // Documentos: https://www.youtube.com/watch?v=znjhY71F-8I
-    @PostMapping("/habitante/new")
+    // StackOverflow question: https://stackoverflow.com/questions/67010558/spring-boot-as-api-rest-is-not-deserializing-the-entire-object
+    @PostMapping(value = "/habitante/new")
     public Respuesta nuevaSolicitud(@RequestBody Solicitud solicitud){
         boolean res;
+        // solicitud.setSolicitante(this.habitanteService.findById(solicitud.getSolicitante().getId()));
         Respuesta respuesta = new Respuesta(400, null);
-        switch (solicitud.getTipo()){ // TODO: Añadir comprobación para las solicitudes de modificación
+        switch (solicitud.getTipo()){
             case "A":
+                if(solicitud.getSolicitante().getId() != null) {
+                    solicitud.setSolicitante(this.habitanteService.findById(solicitud.getSolicitante().getId()));
+                }
+                if(solicitud.getTipoIdentificacion().getId() != null) {
+                    solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
+                }
                 res = validarSolicitudDatosPersonales(solicitud);
                 break;
             case "M":
@@ -61,6 +73,12 @@ public class SolicitudController {
             respuesta = new Respuesta(200, solicitud);
         }
         return respuesta;
+    }
+
+    @PostMapping("/prueba")
+    public void pruebaPrueba(@RequestBody Habitante habitante) {
+        boolean a = true;
+        boolean b = false;
     }
 
     @GetMapping("/habitante/mine")
@@ -148,14 +166,18 @@ public class SolicitudController {
 
     private boolean validarSolicitudDatosPersonales(Solicitud solicitud) {
         boolean res = true;
-        if(solicitud.getSolicitante() == null ||
-                "".equals(solicitud.getNombre()) ||
-                "".equals(solicitud.getPrimerApellido()) ||
-                "".equals(solicitud.getSegundoApellido()) ||
-                solicitud.getFechaNacimiento().after(new Date()) ||
-                !solicitud.getSubtipo().contains(solicitud.getTipo()) ||
-                (solicitud.getTipoIdentificacion() != 0 && "".equals(solicitud.getIdentificacion())))
+        if(solicitud.getTipoIdentificacion() != null)
         {
+            if(solicitud.getSolicitante() == null ||
+                    "".equals(solicitud.getNombre()) ||
+                    "".equals(solicitud.getPrimerApellido()) ||
+                    "".equals(solicitud.getSegundoApellido()) ||
+                    solicitud.getFechaNacimiento().after(new Date()) ||
+                    !solicitud.getSubtipo().contains(solicitud.getTipo()) ||
+                    (solicitud.getTipoIdentificacion().getCodigoTarjeta() != 0 && "".equals(solicitud.getIdentificacion()))) {
+                res = false;
+            }
+        } else {
             res = false;
         }
         return res;
