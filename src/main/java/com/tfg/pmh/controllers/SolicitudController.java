@@ -40,37 +40,46 @@ public class SolicitudController {
     @PostMapping(value = "/habitante/new")
     public Respuesta nuevaSolicitud(@RequestBody Solicitud solicitud){
         boolean res;
-        // solicitud.setSolicitante(this.habitanteService.findById(solicitud.getSolicitante().getId()));
-        Respuesta respuesta = new Respuesta(400, null);
-        switch (solicitud.getTipo()){
-            case "A":
-                if(solicitud.getSolicitante().getId() != null) {
-                    solicitud.setSolicitante(this.habitanteService.findById(solicitud.getSolicitante().getId()));
-                }
-                if(solicitud.getTipoIdentificacion().getId() != null) {
-                    solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
-                }
-                res = validarSolicitudDatosPersonales(solicitud);
-                break;
-            case "M":
-                if("MD".equals(solicitud.getSubtipo())) {
+        Respuesta respuesta = null;
+        try {
+            switch (solicitud.getTipo()){
+                case "A":
+                    if(solicitud.getSolicitante().getId() != null) {
+                        solicitud.setSolicitante(this.habitanteService.findById(solicitud.getSolicitante().getId()));
+                    }
+                    if(solicitud.getTipoIdentificacion().getId() != null) {
+                        solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
+                    }
                     res = validarSolicitudDatosPersonales(solicitud);
-                } else {
-                    res = validarSolicitudVivienda(solicitud);
-                }
-                break;
-            default:
-                res = false;
-                break;
-        }
-        if(res) {
-            if (solicitud.getDocumentos().size() == 0) {
-                // Se ha decidido rechazar directamente la solicitud por no haber adjuntado documentos.
-                solicitud.setEstado("R");
-                solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA POR NO ADJUNTAR DOCUMENTOS. SI CREE QUE ES UN ERROR DEL SISTEMA. REALICE OTRA SOLICITUD NUEVA.");
+                    break;
+                case "M":
+                    if("MD".equals(solicitud.getSubtipo())) {
+                        res = validarSolicitudDatosPersonales(solicitud);
+                    } else {
+                        res = validarSolicitudVivienda(solicitud);
+                    }
+                    break;
+                default:
+                    res = false;
+                    break;
             }
-            this.service.save(solicitud);
-            respuesta = new Respuesta(200, solicitud);
+            if(res) {
+                if (solicitud.getDocumentos().size() == 0) {
+                    // Se ha decidido rechazar directamente la solicitud por no haber adjuntado documentos.
+                    solicitud.setEstado("R");
+                    solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA POR NO ADJUNTAR DOCUMENTOS. SI CREE QUE ES UN ERROR DEL SISTEMA. REALICE OTRA SOLICITUD NUEVA.");
+                } else if("MV".equals(solicitud.getSubtipo()) && solicitud.getSolicitante().getVivienda() == null) {
+                    solicitud.setEstado("R");
+                    solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA SI NO TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA");
+                } else if("ACR".equals(solicitud.getSubtipo()) && solicitud.getSolicitante().getVivienda() != null) {
+                    solicitud.setEstado("R");
+                    solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA SI TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA");
+                }
+                this.service.save(solicitud);
+                respuesta = new Respuesta(200, solicitud);
+            }
+        } catch (Exception e) {
+            respuesta = new Respuesta(400, null);
         }
         return respuesta;
     }
