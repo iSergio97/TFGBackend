@@ -32,16 +32,26 @@ public class OperacionController {
 
     @GetMapping("list")
     public Respuesta listaOperaciones() {
-        Respuesta res = new Respuesta(400, null);
-
+        Respuesta res;
         try {
             List<Operacion> lista = this.operacionService.findAll();
-            res.setObject(lista);
-            res.setStatus(200);
+            res = new Respuesta(200, lista);
         } catch (Exception e) {
-            // EXCEPCIÓN CONTROLADA
+            // EXCEPCIÓN NO CONTROLADA
+            res = new Respuesta(400, null);
         }
+        return res;
+    }
 
+    @GetMapping("/{id}")
+    public Respuesta operacionById(@PathVariable Long id) {
+        Respuesta res;
+        try {
+            Operacion operacion = this.operacionService.findById(id);
+            res = new Respuesta(200, operacion);
+        } catch (Exception e) {
+            res = new Respuesta(200, null);
+        }
         return res;
     }
 }

@@ -33,6 +33,12 @@ public class SolicitudController {
 
     @Autowired
     private IdentificacionService identificacionService;
+
+    @Autowired
+    private AdministradorService administradorService;
+
+    @Autowired
+    private OperacionService operacionService;
     // Métodos para los habitantes
 
     // Documentos: https://www.youtube.com/watch?v=znjhY71F-8I
@@ -206,16 +212,45 @@ public class SolicitudController {
     // Métodos para los administradores
 
     @PostMapping("/administrador/update")
-    public Respuesta updateSolicitud(@RequestParam("solicitudId") Long solicitudId, @RequestParam("estado") String estado, @RequestParam("justificacion") String justificacion, @RequestParam("admin") Administrador admin) {
-        Solicitud solicitudBD = this.service.findById(solicitudId);
-        // Si se intenta actualizar una solicitud que no está pendiente o el estado no es (A)ceptar o (R)echazar, se devuelve error de petición.
-        if(!solicitudBD.getEstado().equals("P") || !Arrays.asList("A", "R").contains(estado) || admin == null) {
-            return new Respuesta(400, null);
-        } else {
-            solicitudBD.setEstado(estado);
-            solicitudBD.setJustificacion(justificacion);
-            this.service.save(solicitudBD);
-            return new Respuesta(200, solicitudBD);
+    public Respuesta updateSolicitud(@RequestParam("solicitudId") Long solicitudId, @RequestParam("estado") String estado, @RequestParam("justificacion") String justificacion, @RequestParam("admin") Long adminId) {
+        Respuesta res;
+        try {
+            Solicitud solicitudBD = this.service.findById(solicitudId);
+            Administrador admin = this.administradorService.findOne(adminId);
+            // Si se intenta actualizar una solicitud que no está pendiente o el estado no es (A)ceptar o (R)echazar, se devuelve error de petición.
+            if(!solicitudBD.getEstado().equals("P") || Arrays.asList("A", "R").contains(estado) || adminId == null || admin == null) {
+                res = new Respuesta(400, null);
+            } else {
+                solicitudBD.setEstado(estado);
+                solicitudBD.setJustificacion(justificacion);
+                convertirSolicitud(solicitudBD);
+                this.service.save(solicitudBD);
+                res = new Respuesta(200, solicitudBD);
+            }
+        } catch (Exception e) {
+            // Se ha producido un error inesperado y se va a devolver un 400 como respuesta a la petición
+            res = new Respuesta(400, null);
         }
+        return res;
+    }
+
+    private void convertirSolicitud(Solicitud solicitud) {
+        Habitante habitante = solicitud.getSolicitante();
+        Operacion operacion = new Operacion();
+        operacion.setTipo(solicitud.getTipo());
+        operacion.setSubtipo(solicitud.getSubtipo());
+        operacion.setFechaOperacion(new Date());
+        operacion.setHabitante(habitante);
+        if("A".equals(solicitud.getTipo()) || "MD".equals(solicitud.getSubtipo())) {
+            habitante.setNombre(solicitud.getNombre());
+            habitante.setPrimerApellido(solicitud.getPrimerApellido());
+            habitante.setSegundoApellido(solicitud.getSegundoApellido());
+            // TODO: Comprobar el tipo de identificación para ponérselo al habitante
+            habitante.setIdentificacion(solicitud.getIdentificacion());
+        } else if("M".equals(solicitud.getTipo()) && !"MD".equals(solicitud.getSubtipo())) {
+            habitante.setVivienda(solicitud.getVivienda());
+        }
+        this.habitanteService.save(habitante);
+        this.operacionService.save(operacion);
     }
 }

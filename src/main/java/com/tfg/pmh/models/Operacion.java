@@ -34,15 +34,6 @@ public class Operacion implements Serializable {
     @ManyToOne
     private Habitante habitante;
 
-    @Valid
-    @ManyToOne
-    private Vivienda viviendaOrigen;
-
-    // Este campo puede estar nulo, si la operación es por modificación de datos personales
-    @ManyToOne
-    @Valid
-    private Vivienda viviendaDestino;
-
     @ManyToOne
     @Valid
     private Solicitud solicitud;
