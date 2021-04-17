@@ -3,9 +3,9 @@ package com.tfg.pmh.models;
 import lombok.*;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 public class Respuesta {
 
     private Integer status;

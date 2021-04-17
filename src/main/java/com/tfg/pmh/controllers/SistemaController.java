@@ -2,6 +2,8 @@ package com.tfg.pmh.controllers;
 
 import com.tfg.pmh.models.*;
 import com.tfg.pmh.services.*;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
@@ -291,7 +293,11 @@ public class SistemaController {
             Assert.notNull(admin);
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             if(encoder.matches(password + admin.getCuentaUsuario().getSalt(), admin.getCuentaUsuario().getPassword())) {
-                res = new Respuesta(200, admin);
+                List<Object> lista = new ArrayList<>();
+                String token = getJWTToken(admin.getCuentaUsuario().getUsername());
+                lista.add(admin);
+                lista.add(token);
+                res = new Respuesta(200, lista);
             } else{
                 res = new Respuesta(350, null);
             }
@@ -380,11 +386,23 @@ public class SistemaController {
             this.solicitudService.save(solicitud);
             op.setSolicitud(solicitud);
             op.setFechaOperacion(new Date());
-            op.setViviendaOrigen(habitanteElegido.getVivienda());
-            op.setViviendaDestino(habitanteElegido.getVivienda());
             this.operacionService.save(op);
         }
         return 200;
+    }
+
+    private String getJWTToken(String username) {
+        String secretKey = "tfg-pmh-poh";
+        String token = Jwts
+                .builder()
+                .setId("softtekJWT")
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                .signWith(SignatureAlgorithm.HS512,
+                        secretKey.getBytes()).compact();
+
+        return "Bearer " + token;
     }
 
     @GetMapping("/habitantes/filter/alta")
