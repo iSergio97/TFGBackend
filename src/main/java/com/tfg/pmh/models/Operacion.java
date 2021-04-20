@@ -37,4 +37,32 @@ public class Operacion implements Serializable {
     @ManyToOne
     @Valid
     private Solicitud solicitud;
+
+    /*
+        Propiedades duplicadas de solicitud para poder agilizar el proceso
+        de mostrar los cambios que se han aplicado en esta solicitud
+    */
+
+
+    private String nombre;
+
+    private String primerApellido;
+
+    private String segundoApellido;
+
+    @Pattern(regexp = "^(\\d{8}\\w)|(\\d{7}[XYZ])$")
+    private String identificacion;
+
+    @Valid
+    @ManyToOne
+    private Identificacion tipoIdentificacion;
+
+    @Past
+    private Date fechaNacimiento;
+
+    @Valid
+    @ManyToOne
+    private Vivienda vivienda;
+
+
 }

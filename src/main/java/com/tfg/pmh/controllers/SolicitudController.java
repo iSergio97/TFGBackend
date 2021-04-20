@@ -5,6 +5,7 @@ import com.tfg.pmh.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,14 +49,14 @@ public class SolicitudController {
         boolean res;
         Respuesta respuesta = null;
         try {
+            if(solicitud.getSolicitante().getId() != null) {
+                solicitud.setSolicitante(this.habitanteService.findById(solicitud.getSolicitante().getId()));
+            }
+            if(solicitud.getTipoIdentificacion() != null && solicitud.getTipoIdentificacion().getId() != null) {
+                solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
+            }
             switch (solicitud.getTipo()){
                 case "A":
-                    if(solicitud.getSolicitante().getId() != null) {
-                        solicitud.setSolicitante(this.habitanteService.findById(solicitud.getSolicitante().getId()));
-                    }
-                    if(solicitud.getTipoIdentificacion().getId() != null) {
-                        solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
-                    }
                     res = validarSolicitudDatosPersonales(solicitud);
                     break;
                 case "M":
@@ -158,6 +159,7 @@ public class SolicitudController {
         } else {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + doc.getName() + "\"")
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(doc.getData());
         }
 
@@ -189,7 +191,8 @@ public class SolicitudController {
                     "".equals(solicitud.getSegundoApellido()) ||
                     solicitud.getFechaNacimiento().after(new Date()) ||
                     !solicitud.getSubtipo().contains(solicitud.getTipo()) ||
-                    (solicitud.getTipoIdentificacion().getCodigoTarjeta() != 0 && "".equals(solicitud.getIdentificacion()))) {
+                    (solicitud.getTipoIdentificacion().getCodigoTarjeta() != 0 && "".equals(solicitud.getIdentificacion())
+                            && solicitud.getIdentificacion().length() > 0  && solicitud.getIdentificacion().length() < 8)) {
                 res = false;
             }
         } else {
