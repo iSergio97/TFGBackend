@@ -83,7 +83,8 @@ public class SolicitudController {
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA SI TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA");
                 }
                 this.service.save(solicitud);
-                respuesta = new Respuesta(200, solicitud);
+                Solicitud sol = this.service.findById(solicitud.getId());
+                respuesta = new Respuesta(200, sol);
             }
         } catch (Exception e) {
             respuesta = new Respuesta(400, null);
