@@ -39,5 +39,7 @@ public class SolicitudService {
     public List<Solicitud> findBySolicitante(Long id) {
         return this.repository.findSolicitudesBySolicitante(id);
     }
+
+    public List<Solicitud> findAll() { return this.repository.findAll(); }
 }
 

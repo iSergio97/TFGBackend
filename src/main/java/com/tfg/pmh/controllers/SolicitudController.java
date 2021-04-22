@@ -215,20 +215,35 @@ public class SolicitudController {
     }
     // Métodos para los administradores
 
+    @GetMapping("/administrador/all")
+    public Respuesta allRequestsAdmin() {
+        Respuesta respuesta = new Respuesta();
+        try {
+            respuesta.setObject(this.service.findAll());
+            respuesta.setStatus(200);
+        } catch (Exception e) {
+            respuesta.setObject(null);
+            respuesta.setStatus(404);
+        }
+        return respuesta;
+    }
+
     @PostMapping("/administrador/update")
-    public Respuesta updateSolicitud(@RequestParam("solicitudId") Long solicitudId, @RequestParam("estado") String estado, @RequestParam("justificacion") String justificacion, @RequestParam("admin") Long adminId) {
+    public Respuesta updateSolicitud(@RequestParam("solicitudId") Long solicitudId, @RequestParam("estado") String estado, @RequestParam("justificacion") String justificacion) {
         Respuesta res;
         try {
             Solicitud solicitudBD = this.service.findById(solicitudId);
-            Administrador admin = this.administradorService.findOne(adminId);
             // Si se intenta actualizar una solicitud que no está pendiente o el estado no es (A)ceptar o (R)echazar, se devuelve error de petición.
-            if(!solicitudBD.getEstado().equals("P") || Arrays.asList("A", "R").contains(estado) || adminId == null || admin == null) {
+            if(!solicitudBD.getEstado().equals("P") || !Arrays.asList("A", "R").contains(estado)) {
                 res = new Respuesta(400, null);
             } else {
                 solicitudBD.setEstado(estado);
                 solicitudBD.setJustificacion(justificacion);
                 convertirSolicitud(solicitudBD);
                 this.service.save(solicitudBD);
+                if("A".equals(estado)) {
+                    realizarOperacion(solicitudBD);
+                }
                 res = new Respuesta(200, solicitudBD);
             }
         } catch (Exception e) {
@@ -236,6 +251,11 @@ public class SolicitudController {
             res = new Respuesta(400, null);
         }
         return res;
+    }
+
+    private void realizarOperacion(Solicitud solicitud) {
+        // Consultar cómo funcionan las operaciones (si se hacen dos o sólo una).
+        // Tras crear la operación, se le modifican al usuario los datos que ha pedido en la solicitud y luego se guarda en base de datos
     }
 
     private void convertirSolicitud(Solicitud solicitud) {

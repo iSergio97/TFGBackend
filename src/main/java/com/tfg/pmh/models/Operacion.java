@@ -28,6 +28,7 @@ public class Operacion implements Serializable {
     private String tipo;
 
     @NotBlank
+    @Pattern(regexp = "^(ACR|AIM|BCD|MV|MD|MRE)$")
     private String subtipo;
 
     @Valid
