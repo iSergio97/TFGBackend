@@ -17,8 +17,8 @@ import java.util.*;
  * @since: 18/11/2020
  */
 @RestController
-@RequestMapping("/operacion/administrador/")
-@CrossOrigin(origins = "http://localhost:8081")
+@RequestMapping("/operaciones/administrador")
+@CrossOrigin(origins = {"*"})
 public class OperacionController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class OperacionController {
     @Autowired
     private ViviendaService viviendaService;
 
-    @GetMapping("list")
+    @GetMapping("/list")
     public Respuesta listaOperaciones() {
         Respuesta res;
         try {

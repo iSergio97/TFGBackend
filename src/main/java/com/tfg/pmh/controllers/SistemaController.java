@@ -413,7 +413,7 @@ public class SistemaController {
                 .signWith(SignatureAlgorithm.HS512,
                         secretKey.getBytes()).compact();
 
-        return "Bearer " + token;
+        return token;
     }
 
     @GetMapping("/habitantes/filter/alta")

@@ -228,6 +228,20 @@ public class SolicitudController {
         return respuesta;
     }
 
+    @GetMapping("/administrador/{id}")
+    public Respuesta getSolicitudAdmin(@PathVariable Long id) {
+        Solicitud solicitud = this.service.findById(id);
+        Respuesta res = new Respuesta();
+        if(solicitud != null) {
+            res.setObject(solicitud);
+            res.setStatus(200);
+        } else {
+            res.setObject(null);
+            res.setStatus(404);
+        }
+        return res;
+    }
+
     @PostMapping("/administrador/update")
     public Respuesta updateSolicitud(@RequestParam("solicitudId") Long solicitudId, @RequestParam("estado") String estado, @RequestParam("justificacion") String justificacion) {
         Respuesta res;
@@ -239,7 +253,6 @@ public class SolicitudController {
             } else {
                 solicitudBD.setEstado(estado);
                 solicitudBD.setJustificacion(justificacion);
-                convertirSolicitud(solicitudBD);
                 this.service.save(solicitudBD);
                 if("A".equals(estado)) {
                     realizarOperacion(solicitudBD);
@@ -254,17 +267,36 @@ public class SolicitudController {
     }
 
     private void realizarOperacion(Solicitud solicitud) {
-        // Consultar cómo funcionan las operaciones (si se hacen dos o sólo una).
-        // Tras crear la operación, se le modifican al usuario los datos que ha pedido en la solicitud y luego se guarda en base de datos
+        Habitante solicitante = solicitud.getSolicitante();
+        Operacion operacion = new Operacion();
+        operacion.setFechaOperacion(new Date());
+        operacion.setTipo(solicitud.getTipo());
+        operacion.setSubtipo(solicitud.getSubtipo());
+        operacion.setHabitante(solicitante);
+        operacion.setSolicitud(solicitud);
+        if(solicitud.getTipo().equals("A") || solicitud.getSubtipo().equals("MD")) {
+            solicitante.setNombre(solicitud.getNombre());
+            operacion.setNombre(solicitud.getNombre());
+            solicitante.setPrimerApellido(solicitud.getPrimerApellido());
+            operacion.setPrimerApellido(solicitud.getPrimerApellido());
+            solicitante.setSegundoApellido(solicitud.getSegundoApellido());
+            operacion.setSegundoApellido(solicitud.getSegundoApellido());
+            solicitante.setFechaNacimiento(solicitud.getFechaNacimiento());
+            operacion.setFechaNacimiento(solicitud.getFechaNacimiento());
+            solicitante.setIdentificacion(solicitud.getIdentificacion());
+            operacion.setIdentificacion(solicitud.getIdentificacion());
+            solicitante.setTarjetaIdentificacion(solicitud.getTipoIdentificacion());
+            operacion.setTipoIdentificacion(solicitud.getTipoIdentificacion());
+        } else {
+            solicitante.setVivienda(solicitud.getVivienda());
+            operacion.setVivienda(solicitud.getVivienda());
+        }
+        this.habitanteService.save(solicitante);
+        this.operacionService.save(operacion);
     }
 
     private void convertirSolicitud(Solicitud solicitud) {
         Habitante habitante = solicitud.getSolicitante();
-        Operacion operacion = new Operacion();
-        operacion.setTipo(solicitud.getTipo());
-        operacion.setSubtipo(solicitud.getSubtipo());
-        operacion.setFechaOperacion(new Date());
-        operacion.setHabitante(habitante);
         if("A".equals(solicitud.getTipo()) || "MD".equals(solicitud.getSubtipo())) {
             habitante.setNombre(solicitud.getNombre());
             habitante.setPrimerApellido(solicitud.getPrimerApellido());
@@ -274,7 +306,5 @@ public class SolicitudController {
         } else if("M".equals(solicitud.getTipo()) && !"MD".equals(solicitud.getSubtipo())) {
             habitante.setVivienda(solicitud.getVivienda());
         }
-        this.habitanteService.save(habitante);
-        this.operacionService.save(operacion);
     }
 }

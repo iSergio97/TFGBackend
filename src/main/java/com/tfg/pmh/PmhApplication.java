@@ -37,6 +37,8 @@ public class PmhApplication {
 					.antMatchers(HttpMethod.POST, "/sistema/administrador/login").permitAll()
 					.antMatchers(HttpMethod.GET, "/habitante/**").hasRole("HABITANTE")
 					.antMatchers(HttpMethod.POST, "/habitante/**").hasRole("HABITANTE")
+					.antMatchers(HttpMethod.GET, "/operaciones/**").hasRole("ADMINISTRADOR")
+					.antMatchers(HttpMethod.POST, "/operaciones/**").hasRole("ADMINISTRADOR")
 					.antMatchers(HttpMethod.GET, "/sistema/**").hasRole("ADMINISTRADOR")
 					.antMatchers(HttpMethod.POST, "/sistema/**").hasRole("ADMINISTRADOR")
 					.antMatchers(HttpMethod.GET, "/solicitud/**").authenticated()

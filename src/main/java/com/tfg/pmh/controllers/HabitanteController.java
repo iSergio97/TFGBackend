@@ -61,7 +61,7 @@ public class HabitanteController {
         return res;
     }
 
-    @PostMapping("/user-account/edit")
+    @PostMapping("/perfil")
     public Respuesta editUserAccount(@RequestBody CuentaUsuarioForm cuentaUsuario) {
         if("".equals(cuentaUsuario.getNewPassword()) || "".equals(cuentaUsuario.getNewUsername())) {
             return new Respuesta(380, null);

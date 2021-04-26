@@ -26,6 +26,9 @@ public class SolicitudService {
     @Autowired
     private HabitanteService habitanteService;
 
+    @Autowired
+    private IdentificacionService identificacionService;
+
     public void save(Solicitud solicitud) {
         assert solicitud != null;
 
@@ -33,7 +36,15 @@ public class SolicitudService {
     }
 
     public Solicitud findById(Long id) {
-        return this.repository.findById(id).orElse(null);
+        Solicitud solicitud = this.repository.findById(id).orElse(null);
+        if(solicitud.getTipo().equals("A") || solicitud.getSubtipo().equals("MD") && solicitud.getTipoIdentificacion().getCodigoTarjeta() == null) {
+            solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
+        }
+        if(solicitud.getVivienda().getNumero() == null && solicitud.getSubtipo().equals("MV")) {
+            solicitud.setVivienda(this.viviendaService.findById(solicitud.getVivienda().getId()));
+        }
+
+        return solicitud;
     }
 
     public List<Solicitud> findBySolicitante(Long id) {
