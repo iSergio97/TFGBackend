@@ -37,11 +37,11 @@ public class SolicitudService {
 
     public Solicitud findById(Long id) {
         Solicitud solicitud = this.repository.findById(id).orElse(null);
-        if(solicitud.getTipo().equals("A") || solicitud.getSubtipo().equals("MD") && solicitud.getTipoIdentificacion().getCodigoTarjeta() == null) {
-            solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
-        }
-        if(solicitud.getVivienda().getNumero() == null && solicitud.getSubtipo().equals("MV")) {
+        if(solicitud.getTipoIdentificacion() == null) {
             solicitud.setVivienda(this.viviendaService.findById(solicitud.getVivienda().getId()));
+        }
+        if(solicitud.getVivienda() == null) {
+            solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
         }
 
         return solicitud;

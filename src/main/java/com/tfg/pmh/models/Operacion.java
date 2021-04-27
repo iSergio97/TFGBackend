@@ -51,7 +51,6 @@ public class Operacion implements Serializable {
 
     private String segundoApellido;
 
-    @Pattern(regexp = "^(\\d{8}\\w)|(\\d{7}[XYZ])$")
     private String identificacion;
 
     @Valid

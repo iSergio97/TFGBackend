@@ -23,7 +23,6 @@ public class Solicitud implements Serializable {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    @Past
     private Date fecha;
 
     @Valid
@@ -46,7 +45,7 @@ public class Solicitud implements Serializable {
     private String estado;
 
     // Sólo para menores de edad que lo quieran añadir o para personas con tarjeta identificativa
-    @Pattern(regexp = "^(\\d{8}\\w)|(\\d{7}[XYZ])$")
+    // @Pattern(regexp = "^(\\d{8}\\w)|(\\d{7}[XYZ])$")
     private String identificacion;
 
     @Valid

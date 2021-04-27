@@ -28,41 +28,32 @@ public class PmhApplication {
 
 	@EnableWebSecurity
 	@Configuration
+	static
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.csrf().disable().authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/habitante/login").permitAll()
-					.antMatchers(HttpMethod.POST, "/sistema/administrador/login").permitAll()
-					.antMatchers(HttpMethod.GET, "/habitante/**").hasRole("HABITANTE")
-					.antMatchers(HttpMethod.POST, "/habitante/**").hasRole("HABITANTE")
-					.antMatchers(HttpMethod.GET, "/operaciones/**").hasRole("ADMINISTRADOR")
-					.antMatchers(HttpMethod.POST, "/operaciones/**").hasRole("ADMINISTRADOR")
-					.antMatchers(HttpMethod.GET, "/sistema/**").hasRole("ADMINISTRADOR")
-					.antMatchers(HttpMethod.POST, "/sistema/**").hasRole("ADMINISTRADOR")
-					.antMatchers(HttpMethod.GET, "/solicitud/**").authenticated()
-					.antMatchers(HttpMethod.POST, "/solicitud/**").authenticated()
-					.antMatchers(HttpMethod.GET, "/**").authenticated()
-					.antMatchers(HttpMethod.POST, "/**").authenticated()
-					.antMatchers(HttpMethod.GET, "/").permitAll()
-					.and().cors().and()
+			http.csrf().disable()
 					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-					.authorizeRequests().anyRequest().authenticated();
-			/*
-					.antMatchers(HttpMethod.GET, "/habitante/**").hasRole("HABITANTE")
-					.antMatchers(HttpMethod.POST, "/habitante/**").hasRole("HABITANTE")
-					.antMatchers(HttpMethod.GET, "/sistema/**").hasRole("ADMINISTRADOR")
-					.antMatchers(HttpMethod.POST, "/sistema/**").hasRole("ADMINISTRADOR")
-					.antMatchers(HttpMethod.GET, "/solicitud/**").permitAll()
-			 */
+					.authorizeRequests()
+					.antMatchers(HttpMethod.POST, "/**/login").permitAll()
+					.antMatchers(HttpMethod.GET, "/habitante/**").hasAuthority("HABITANTE")
+					.antMatchers(HttpMethod.POST, "/habitante/**").hasAuthority("HABITANTE")
+					.antMatchers(HttpMethod.POST, "/perfil/**").hasAuthority("HABITANTE")
+					.antMatchers(HttpMethod.GET, "/estadisticas/**").hasAuthority("ADMINISTRADOR")
+					.antMatchers(HttpMethod.GET, "/operaciones/**").hasAuthority("ADMINISTRADOR")
+					.antMatchers(HttpMethod.POST, "/operaciones/**").hasAuthority("ADMINISTRADOR")
+					.antMatchers(HttpMethod.GET, "/sistema/**").hasAuthority("ADMINISTRADOR")
+					.antMatchers(HttpMethod.POST, "/sistema/**").hasAuthority("ADMINISTRADOR")
+					.antMatchers(HttpMethod.GET, "/solicitud/**").authenticated()
+					.antMatchers(HttpMethod.POST, "/solicitud/**").authenticated();
 		}
 
 		@Bean
 		CorsConfigurationSource corsConfigurationSource() {
 			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 			CorsConfiguration configuration = new CorsConfiguration();
-			configuration.setAllowedOrigins(Arrays.asList("http://localhost:8081")); // Añadir origen de netlify
+			configuration.setAllowedOrigins(Collections.singletonList("*")); // Añadir origen de netlify
 			configuration.setAllowedHeaders(Collections.singletonList("*")); // Headers permitidos
 			configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE")); // Métodos permitidos
 			source.registerCorsConfiguration("/**", configuration);

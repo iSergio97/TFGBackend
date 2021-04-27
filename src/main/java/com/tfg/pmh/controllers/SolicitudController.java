@@ -57,7 +57,7 @@ public class SolicitudController {
             }
             switch (solicitud.getTipo()){
                 case "A":
-                    res = validarSolicitudDatosPersonales(solicitud);
+                    res = validarSolicitudVivienda(solicitud);
                     break;
                 case "M":
                     if("MD".equals(solicitud.getSubtipo())) {
@@ -70,6 +70,7 @@ public class SolicitudController {
                     res = false;
                     break;
             }
+            solicitud.setFecha(new Date());
             if(res) {
                 if (solicitud.getDocumentos().size() == 0) {
                     // Se ha decidido rechazar directamente la solicitud por no haber adjuntado documentos.
@@ -83,7 +84,7 @@ public class SolicitudController {
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA SI TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA");
                 }
                 this.service.save(solicitud);
-                Solicitud sol = this.service.findById(solicitud.getId());
+                Solicitud sol = this.service.findById(solicitud.getId()); // Corregir error de que no se guardan las solicitudes de MD con identificación vacía
                 respuesta = new Respuesta(200, sol);
             }
         } catch (Exception e) {

@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/sistema/administrador")
+@RequestMapping("/sistema")
 @CrossOrigin(origins = {"*"})
 public class SistemaController {
 
@@ -54,13 +54,7 @@ public class SistemaController {
     @Autowired
     private CalleService calleService;
 
-    @GetMapping("/info")
-    public List<Integer> systemInfo() {
-        // Puede que interese crear un objeto Info, no persistente, para almacenar estas cosas
-        return new ArrayList<>();
-    }
-
-    @GetMapping("/poblate")
+    @GetMapping("/administrador/poblate")
     public Integer poblate() throws NoSuchAlgorithmException {
 
         //Creamos las tarjeta de identificación
@@ -75,6 +69,144 @@ public class SistemaController {
         // Tras ello, creamos a 100 habitantes
         cuentaHabitantes();
 
+        return 200;
+    }
+
+    @GetMapping("/fluctuacion")
+    public List<Integer> fluctuacionHabitantes() {
+        return null;
+    }
+
+    @GetMapping("/administrador/identificacion")
+    public Integer poblateIdentificacion() {
+        Random random = new Random();
+        List<Habitante> habitantes = this.habitanteService.findAll();
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        for(Habitante h : habitantes) {
+            Integer identificacion = h.getTarjetaIdentificacion().getCodigoTarjeta();
+            if(identificacion == 1) { // Si el habitante tiene como código el DNI
+                int randomNumber = random.nextInt(25);
+                int dni = random.nextInt(99999999);
+                h.setIdentificacion(Integer.toString(dni) + String.valueOf(alphabet.charAt(randomNumber)).toUpperCase());
+            } else if (identificacion == 2) { // Si el habitante tiene pasaporte
+                String letras =
+                        alphabet.charAt((int) (Math.random() * 25)) +
+                        String.valueOf(alphabet.charAt((int) (Math.random() * 25))) +
+                                alphabet.charAt((int) (Math.random() * 25));
+                int numeros = random.nextInt(999999);
+
+                h.setIdentificacion(letras.toUpperCase() + numeros);
+            }
+            else if (identificacion == 3) {
+                int numeros = random.nextInt(9999999);
+                String letra = String.valueOf("XYZ".charAt(random.nextInt(3)));
+
+                h.setIdentificacion(String.valueOf(numeros) + letra);
+            }
+
+            this.habitanteService.save(h);
+        }
+
+        return 200;
+    }
+
+    @PostMapping("/administrador/login")
+    private Respuesta login(@RequestParam("username") String username, @RequestParam("password") String password) {
+        Respuesta res = null;
+        try {
+            if("".equals(username) || "".equals(password) || null == username || null == password){
+                return new Respuesta(350, null);
+            }
+            Administrador admin = administradorService.findByUsername(username);
+            Assert.notNull(admin);
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            if(encoder.matches(password + admin.getCuentaUsuario().getSalt(), admin.getCuentaUsuario().getPassword())) {
+                List<Object> lista = new ArrayList<>();
+                String token = getJWTToken(admin.getCuentaUsuario().getUsername());
+                lista.add(admin);
+                lista.add(token);
+                res = new Respuesta(200, lista);
+            } else{
+                res = new Respuesta(350, null);
+            }
+        } catch (Exception e) {
+            // Excepción controlada
+            res = new Respuesta(350, null);
+        }
+
+        return res;
+    }
+
+    @GetMapping("/administrador/prueba")
+    public Respuesta pruebaMultiobjeto() {
+        Map<String, Object> ls = new HashMap<>();
+        ls.put("Cadena de texto", "A");
+        ls.put("Número", 333);
+        ls.put("habitante", this.administradorService.findByUsername("sergio"));
+
+        return new Respuesta(200, ls);
+    }
+
+    @GetMapping("/administrador/habitantes/count")
+    public Respuesta numHabitantes() {
+        return new Respuesta(200, this.habitanteService.findAll().size());
+    }
+
+    // TODO: Corregir problema se crean solicitudes pero el tipo y el subtipo no son del mismo grupo
+    @GetMapping("/administrador/operaciones/create")
+    public Integer newOperaciones() {
+        List<String> tipos = new ArrayList<>();
+        tipos.add("A");
+        tipos.add("M");
+
+        List<String> altas = new ArrayList<>();
+        altas.add("AIM");
+        altas.add("ACR");
+
+        List<String> modificaciones = new ArrayList<>();
+        modificaciones.add("MD");
+        modificaciones.add("MV");
+        modificaciones.add("MRE");
+
+
+        List<Habitante> habitantes = this.habitanteService.findAll();
+        Operacion op;
+        for(int i = 0; i < 9; i++) {
+            int opcion = (int) (Math.random() * (2));
+            if(opcion > 2) {
+                opcion = 1;
+            }
+            int range = 2;
+            if(opcion == 1) {
+                range = 3;
+            }
+            int subOpcion = (int) (Math.random() * (range));
+
+            int habEscogido = (int) (Math.random() * habitantes.size());
+
+            Habitante habitanteElegido = habitantes.get(habEscogido);
+            habitantes.remove(habitanteElegido);
+            op = new Operacion();
+            op.setHabitante(habitanteElegido);
+            op.setTipo(tipos.get(opcion));
+            op.setSubtipo(opcion == 0 ?  altas.get(subOpcion) : modificaciones.get(subOpcion));
+            Solicitud solicitud = new Solicitud();
+            solicitud.setTipo(op.getTipo());
+            solicitud.setSubtipo(op.getSubtipo());
+            solicitud.setSolicitante(habitanteElegido);
+            solicitud.setEstado("A");
+            solicitud.setNombre(habitanteElegido.getNombre());
+            solicitud.setPrimerApellido(habitanteElegido.getPrimerApellido());
+            solicitud.setSegundoApellido(habitanteElegido.getSegundoApellido());
+            solicitud.setIdentificacion(habitanteElegido.getIdentificacion());
+            solicitud.setIdentificacion(habitanteElegido.getIdentificacion());
+            solicitud.setFechaNacimiento(habitanteElegido.getFechaNacimiento());
+            System.out.println(op.getTipo() + ", " + op.getSubtipo());
+            this.solicitudService.save(solicitud);
+            op.setSolicitud(solicitud);
+            op.setFechaOperacion(new Date());
+            this.operacionService.save(op);
+        }
         return 200;
     }
 
@@ -252,148 +384,6 @@ public class SistemaController {
                 .toString();
     }
 
-    @GetMapping("/identificacion")
-    public Integer poblateIdentificacion() {
-        Random random = new Random();
-        List<Habitante> habitantes = this.habitanteService.findAll();
-        String alphabet = "abcdefghijklmnopqrstuvwxyz";
-        for(Habitante h : habitantes) {
-            Integer identificacion = h.getTarjetaIdentificacion().getCodigoTarjeta();
-            if(identificacion == 1) { // Si el habitante tiene como código el DNI
-                int randomNumber = random.nextInt(25);
-                int dni = random.nextInt(99999999);
-                h.setIdentificacion(Integer.toString(dni) + String.valueOf(alphabet.charAt(randomNumber)).toUpperCase());
-            } else if (identificacion == 2) { // Si el habitante tiene pasaporte
-                String letras =
-                        alphabet.charAt((int) (Math.random() * 25)) +
-                        String.valueOf(alphabet.charAt((int) (Math.random() * 25))) +
-                                alphabet.charAt((int) (Math.random() * 25));
-                int numeros = random.nextInt(999999);
-
-                h.setIdentificacion(letras.toUpperCase() + numeros);
-            }
-            else if (identificacion == 3) {
-                int numeros = random.nextInt(9999999);
-                String letra = String.valueOf("XYZ".charAt(random.nextInt(3)));
-
-                h.setIdentificacion(String.valueOf(numeros) + letra);
-            }
-
-            this.habitanteService.save(h);
-        }
-
-        return 200;
-    }
-
-    @PostMapping("/login")
-    private Respuesta login(@RequestParam("username") String username, @RequestParam("password") String password) {
-        Respuesta res = null;
-        try {
-            if("".equals(username) || "".equals(password) || null == username || null == password){
-                return new Respuesta(350, null);
-            }
-            Administrador admin = administradorService.findByUsername(username);
-            Assert.notNull(admin);
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            if(encoder.matches(password + admin.getCuentaUsuario().getSalt(), admin.getCuentaUsuario().getPassword())) {
-                List<Object> lista = new ArrayList<>();
-                String token = getJWTToken(admin.getCuentaUsuario().getUsername());
-                lista.add(admin);
-                lista.add(token);
-                res = new Respuesta(200, lista);
-            } else{
-                res = new Respuesta(350, null);
-            }
-        } catch (Exception e) {
-            // Excepción controlada
-            res = new Respuesta(350, null);
-        }
-
-        return res;
-    }
-
-    @GetMapping("/prueba")
-    public Respuesta pruebaMultiobjeto() {
-        Map<String, Object> ls = new HashMap<>();
-        ls.put("Cadena de texto", "A");
-        ls.put("Número", 333);
-        ls.put("habitante", this.administradorService.findByUsername("sergio"));
-
-        return new Respuesta(200, ls);
-    }
-
-    @GetMapping("/habitantes/count")
-    public Respuesta numHabitantes() {
-        return new Respuesta(200, this.habitanteService.findAll().size());
-    }
-
-    @GetMapping("/habitantes/filter/dates")
-    public Respuesta habitantesPorFechas(Date fechaFrom, Date fechaTo) {
-        // Si la fecha hasta es nula, se toma como fecha tope, la fecha de ahora
-        if(fechaTo == null) {
-            fechaTo = new Date();
-        }
-        return null;
-    }
-
-    // TODO: Corregir problema se crean solicitudes pero el tipo y el subtipo no son del mismo grupo
-    @GetMapping("/operaciones/create")
-    public Integer newOperaciones() {
-        List<String> tipos = new ArrayList<>();
-        tipos.add("A");
-        tipos.add("M");
-
-        List<String> altas = new ArrayList<>();
-        altas.add("AIM");
-        altas.add("ACR");
-
-        List<String> modificaciones = new ArrayList<>();
-        modificaciones.add("MD");
-        modificaciones.add("MV");
-        modificaciones.add("MRE");
-
-
-        List<Habitante> habitantes = this.habitanteService.findAll();
-        Operacion op;
-        for(int i = 0; i < 9; i++) {
-            int opcion = (int) (Math.random() * (2));
-            if(opcion > 2) {
-                opcion = 1;
-            }
-            int range = 2;
-            if(opcion == 1) {
-                range = 3;
-            }
-            int subOpcion = (int) (Math.random() * (range));
-
-            int habEscogido = (int) (Math.random() * habitantes.size());
-
-            Habitante habitanteElegido = habitantes.get(habEscogido);
-            habitantes.remove(habitanteElegido);
-            op = new Operacion();
-            op.setHabitante(habitanteElegido);
-            op.setTipo(tipos.get(opcion));
-            op.setSubtipo(opcion == 0 ?  altas.get(subOpcion) : modificaciones.get(subOpcion));
-            Solicitud solicitud = new Solicitud();
-            solicitud.setTipo(op.getTipo());
-            solicitud.setSubtipo(op.getSubtipo());
-            solicitud.setSolicitante(habitanteElegido);
-            solicitud.setEstado("A");
-            solicitud.setNombre(habitanteElegido.getNombre());
-            solicitud.setPrimerApellido(habitanteElegido.getPrimerApellido());
-            solicitud.setSegundoApellido(habitanteElegido.getSegundoApellido());
-            solicitud.setIdentificacion(habitanteElegido.getIdentificacion());
-            solicitud.setIdentificacion(habitanteElegido.getIdentificacion());
-            solicitud.setFechaNacimiento(habitanteElegido.getFechaNacimiento());
-            System.out.println(op.getTipo() + ", " + op.getSubtipo());
-            this.solicitudService.save(solicitud);
-            op.setSolicitud(solicitud);
-            op.setFechaOperacion(new Date());
-            this.operacionService.save(op);
-        }
-        return 200;
-    }
-
     private String getJWTToken(String username) {
         String secretKey = "tfg-pmh-poh";
 
@@ -414,20 +404,5 @@ public class SistemaController {
                         secretKey.getBytes()).compact();
 
         return token;
-    }
-
-    @GetMapping("/habitantes/filter/alta")
-    public List<Integer> habitantesConOPsAlta() {
-        return this.operacionService.estadisticasHabsAlta();
-    }
-
-    @GetMapping("/habitantes/filter/baja")
-    public List<Integer> habitantesConOPsBaja() {
-        return this.operacionService.estadisticasHabsBaja();
-    }
-
-    @GetMapping("/habitantes/filter/modificacion")
-    public List<Integer> habitantesConOPsModificacion() {
-        return this.operacionService.estadisticasHabsModificacion();
     }
 }
