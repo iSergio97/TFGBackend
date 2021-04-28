@@ -84,4 +84,8 @@ public class OperacionService {
         return ls;
     }
 
+    public Integer contadorOperaciones() {
+        return this.repository.ratioOperacionesPorSolicitud() > 0 ? this.repository.ratioOperacionesPorSolicitud() : 1;
+    }
+
 }

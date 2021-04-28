@@ -9,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class SolicitudService {
@@ -22,9 +21,6 @@ public class SolicitudService {
 
     @Autowired
     private ViviendaService viviendaService;
-
-    @Autowired
-    private HabitanteService habitanteService;
 
     @Autowired
     private IdentificacionService identificacionService;
@@ -52,5 +48,29 @@ public class SolicitudService {
     }
 
     public List<Solicitud> findAll() { return this.repository.findAll(); }
+
+    public Long solicitudesAceptadas() {
+        return this.repository.solicitudesPorEstado("A");
+    }
+
+    public Long solicitudesRechazadas() {
+        return this.repository.solicitudesPorEstado("R");
+    }
+
+    public Long solicitudesPendiente() {
+        return this.repository.solicitudesPorEstado("P");
+    }
+
+    public Long solicitudesCanceladas() {
+        return this.repository.solicitudesPorEstado("C");
+    }
+
+    public Long contadorSolicitudes() {
+        return this.repository.contadorSolicitudes();
+    }
+
+    public Object[] solicitudesPorMes() {
+        return this.repository.solicitudesPorFecha();
+    }
 }
 
