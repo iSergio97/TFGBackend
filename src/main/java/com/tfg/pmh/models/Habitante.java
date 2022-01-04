@@ -27,7 +27,7 @@ public class Habitante extends Persona {
     @Valid
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
-    private Vivienda Vivienda;
+    private Hoja Hoja;
 
     @Valid
     @ManyToOne

@@ -62,7 +62,7 @@ public class Operacion implements Serializable {
 
     @Valid
     @ManyToOne
-    private Vivienda vivienda;
+    private Hoja hoja;
 
 
 }

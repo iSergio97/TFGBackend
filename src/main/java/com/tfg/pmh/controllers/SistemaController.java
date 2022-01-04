@@ -34,7 +34,10 @@ public class SistemaController {
     private IdentificadorService identificadorService;
 
     @Autowired
-    private ViviendaService viviendaService;
+    private NumeracionService numeracionService;
+
+    @Autowired
+    private HojaService hojaService;
 
     @Autowired
     private OperacionService operacionService;
@@ -259,7 +262,8 @@ public class SistemaController {
         Habitante habitante;
         Calendar fechaNacimiento;
         Identificacion identificador;
-        Vivienda vivienda;
+        Numeracion numeracion;
+        List<Hoja> hoja;
         List<Habitante> habitantes = new ArrayList<>();
 
         Random random = new Random();
@@ -287,7 +291,7 @@ public class SistemaController {
                 int upperboundDay = 31;
                 int month = rand.nextInt(upperboundMonth);
                 int day = rand.nextInt(upperboundDay);
-                int year= (int) (Math.random() * (2020 - 1900 + 1) + 1900);
+                int year = (int) (Math.random() * (2020 - 1900 + 1) + 1900);
                 switch (month) {
                     case 0:
                         month = Calendar.JANUARY;
@@ -345,25 +349,21 @@ public class SistemaController {
                 habitante.setNacionalidad("ESPAÑA");
 
                 int tarjeta = random.nextInt(4) + 16;
-                System.out.println(tarjeta);
                 identificador = this.identificadorService.findById((long) tarjeta);
                 habitante.setTarjetaIdentificacion(identificador);
                 habitante.setSexo(tarjeta % 2 == 0 ? "H" : "M");
-                vivienda = this.viviendaService.findById((long) i + 7);
-                System.out.println(vivienda);
-                habitante.setVivienda(vivienda);
+                numeracion = this.numeracionService.findById((long) i + 7);
+                hoja = this.hojaService.findByNumeracion(numeracion.getId());
+                habitante.setHoja(hoja.get(0));
 
-                habitantes.add(habitante);
+                this.habitanteService.save(habitante);
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 System.out.println("Excepción en habitante " + e.getMessage());
-                break;
+                throw e;
             }
-            // Se ha decidido guardar a todos de golpe por si se produce una excepción
-            this.habitanteService.saveAll(habitantes);
         }
-
     }
 
     private String hashText(String text) {

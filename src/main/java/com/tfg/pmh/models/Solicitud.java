@@ -60,7 +60,7 @@ public class Solicitud implements Serializable {
 
     @Valid
     @ManyToOne
-    private Vivienda vivienda;
+    private Hoja hoja;
 
     @Past
     private Date fechaNacimiento;

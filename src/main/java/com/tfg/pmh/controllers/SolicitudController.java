@@ -30,7 +30,7 @@ public class SolicitudController {
 
 
     @Autowired
-    private ViviendaService viviendaService;
+    private NumeracionService numeracionService;
 
     @Autowired
     private IdentificacionService identificacionService;
@@ -76,10 +76,10 @@ public class SolicitudController {
                     // Se ha decidido rechazar directamente la solicitud por no haber adjuntado documentos.
                     solicitud.setEstado("R");
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA POR NO ADJUNTAR DOCUMENTOS. SI CREE QUE ES UN ERROR DEL SISTEMA. REALICE OTRA SOLICITUD NUEVA.");
-                } else if("MV".equals(solicitud.getSubtipo()) && solicitud.getSolicitante().getVivienda() == null) {
+                } else if("MV".equals(solicitud.getSubtipo()) && solicitud.getSolicitante().getHoja() == null) {
                     solicitud.setEstado("R");
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA SI NO TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA");
-                } else if("ACR".equals(solicitud.getSubtipo()) && solicitud.getSolicitante().getVivienda() != null) {
+                } else if("ACR".equals(solicitud.getSubtipo()) && solicitud.getSolicitante().getHoja() != null) {
                     solicitud.setEstado("R");
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA SI TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA");
                 }
@@ -172,7 +172,7 @@ public class SolicitudController {
         Respuesta respuesta = new Respuesta();
         try {
             respuesta.setStatus(200);
-            respuesta.setObject(this.viviendaService.findAll());
+            respuesta.setObject(this.numeracionService.findAll());
         } catch (Exception e) {
             respuesta.setStatus(404);
             respuesta.setObject(null);
@@ -206,7 +206,7 @@ public class SolicitudController {
     private boolean validarSolicitudVivienda(Solicitud solicitud) {
         boolean res = true;
         if(!solicitud.getSubtipo().contains(solicitud.getTipo()) ||
-                solicitud.getVivienda() == null ||
+                solicitud.getHoja() == null ||
                 solicitud.getSolicitante() == null)
         {
             res = false;
@@ -289,8 +289,8 @@ public class SolicitudController {
             solicitante.setTarjetaIdentificacion(solicitud.getTipoIdentificacion());
             operacion.setTipoIdentificacion(solicitud.getTipoIdentificacion());
         } else {
-            solicitante.setVivienda(solicitud.getVivienda());
-            operacion.setVivienda(solicitud.getVivienda());
+            solicitante.setHoja(solicitud.getHoja());
+            operacion.setHoja(solicitud.getHoja());
         }
         this.habitanteService.save(solicitante);
         this.operacionService.save(operacion);
@@ -305,7 +305,7 @@ public class SolicitudController {
             // TODO: Comprobar el tipo de identificación para ponérselo al habitante
             habitante.setIdentificacion(solicitud.getIdentificacion());
         } else if("M".equals(solicitud.getTipo()) && !"MD".equals(solicitud.getSubtipo())) {
-            habitante.setVivienda(solicitud.getVivienda());
+            habitante.setHoja(solicitud.getHoja());
         }
     }
 }

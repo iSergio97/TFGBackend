@@ -4,8 +4,8 @@ import com.tfg.pmh.models.Habitante;
 import com.tfg.pmh.models.Operacion;
 import com.tfg.pmh.models.Respuesta;
 import com.tfg.pmh.services.HabitanteService;
+import com.tfg.pmh.services.NumeracionService;
 import com.tfg.pmh.services.OperacionService;
-import com.tfg.pmh.services.ViviendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +28,7 @@ public class OperacionController {
     private HabitanteService habitanteService;
 
     @Autowired
-    private ViviendaService viviendaService;
+    private NumeracionService numeracionService;
 
     @GetMapping("/list")
     public Respuesta listaOperaciones() {

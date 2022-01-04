@@ -1,9 +1,6 @@
 package com.tfg.pmh.services;
 
-import com.tfg.pmh.forms.CuentaUsuarioForm;
-import com.tfg.pmh.models.CuentaUsuario;
 import com.tfg.pmh.models.Habitante;
-import com.tfg.pmh.models.Vivienda;
 import com.tfg.pmh.repositories.HabitanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +35,7 @@ public class HabitanteService {
     // Cambiado a Collection para evitar la creacion de la clase familia
     // Ya que una familia son aquellas personas que viven en el mismo domicilio
     public Collection<Habitante> findByViviendaId(Long id) {
-        return this.repository.findHabitanteByViviendaId(id);
+        return this.repository.findHabitanteByHojaId(id);
     }
 
     public Habitante findByUsername(String username) {

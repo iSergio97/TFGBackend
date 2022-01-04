@@ -1,16 +1,10 @@
 package com.tfg.pmh.services;
 
-import com.tfg.pmh.forms.SolicitudForm;
 import com.tfg.pmh.models.Solicitud;
-import com.tfg.pmh.models.Vivienda;
 import com.tfg.pmh.repositories.SolicitudRepository;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.*;
 
 @Service
@@ -20,7 +14,7 @@ public class SolicitudService {
     private SolicitudRepository repository;
 
     @Autowired
-    private ViviendaService viviendaService;
+    private HojaService hojaService;
 
     @Autowired
     private IdentificacionService identificacionService;
@@ -33,10 +27,11 @@ public class SolicitudService {
 
     public Solicitud findById(Long id) {
         Solicitud solicitud = this.repository.findById(id).orElse(null);
-        if(solicitud.getTipoIdentificacion() == null) {
-            solicitud.setVivienda(this.viviendaService.findById(solicitud.getVivienda().getId()));
+        // Revisar ambos if porque no entiendo el core de ambos
+        if(null == solicitud.getTipoIdentificacion()) {
+            solicitud.setHoja(this.hojaService.findById(solicitud.getHoja().getId()));
         }
-        if(solicitud.getVivienda() == null) {
+        if(solicitud.getHoja() == null) {
             solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
         }
 

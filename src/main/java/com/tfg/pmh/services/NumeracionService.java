@@ -1,6 +1,6 @@
 package com.tfg.pmh.services;
 
-import com.tfg.pmh.models.Vivienda;
+import com.tfg.pmh.models.Numeracion;
 import com.tfg.pmh.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,22 +9,22 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
-public class ViviendaService {
+public class NumeracionService {
 
     @Autowired
-    private ViviendaRepository repository;
+    private NumeracionRepository repository;
 
-    public void save(Vivienda vivienda) {
+    public void save(Numeracion vivienda) {
         assert vivienda != null;
 
         this.repository.save(vivienda);
     }
 
-    public Vivienda findById(Long id) {
+    public Numeracion findById(Long id) {
         return this.repository.findById(id).orElse(null);
     }
 
-    public List<Vivienda> findAll() {
+    public List<Numeracion> findAll() {
         return this.repository.findAll();
     }
 }
