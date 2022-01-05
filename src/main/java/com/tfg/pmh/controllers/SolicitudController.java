@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +41,9 @@ public class SolicitudController {
 
     @Autowired
     private OperacionService operacionService;
+
+    @Autowired
+    private HojaService hojaService;
     // Métodos para los habitantes
 
     // Documentos: https://www.youtube.com/watch?v=znjhY71F-8I
@@ -167,8 +171,8 @@ public class SolicitudController {
 
     }
 
-    @GetMapping("/viviendas/all")
-    public Respuesta getAllCalles() {
+    @GetMapping("/numeracion/all")
+    public Respuesta getAllNumeraciones() {
         Respuesta respuesta = new Respuesta();
         try {
             respuesta.setStatus(200);
@@ -181,6 +185,20 @@ public class SolicitudController {
         return respuesta;
     }
 
+    @GetMapping("/hojas/{numeracionId}")
+    public Respuesta getAllHojasByNumeracionId(@PathVariable Long numeracionId) {
+        Respuesta res = new Respuesta();
+        try {
+            res.setStatus(200);
+            res.setObject(this.hojaService.findByNumeracion(numeracionId));
+        } catch (Exception e) {
+            res.setStatus(404);
+            res.setObject(null);
+        }
+
+        return res;
+    }
+
     // Métodos auxiliares para tratar las solicitudes
 
     private boolean validarSolicitudDatosPersonales(Solicitud solicitud) {
@@ -188,12 +206,12 @@ public class SolicitudController {
         if(solicitud.getTipoIdentificacion() != null)
         {
             if(solicitud.getSolicitante() == null ||
-                    "".equals(solicitud.getNombre()) ||
-                    "".equals(solicitud.getPrimerApellido()) ||
-                    "".equals(solicitud.getSegundoApellido()) ||
+                    solicitud.getNombre().trim().isEmpty() ||
+                    solicitud.getPrimerApellido().trim().isEmpty() ||
+                    solicitud.getSegundoApellido().trim().isEmpty() ||
                     solicitud.getFechaNacimiento().after(new Date()) ||
                     !solicitud.getSubtipo().contains(solicitud.getTipo()) ||
-                    (solicitud.getTipoIdentificacion().getCodigoTarjeta() != 0 && "".equals(solicitud.getIdentificacion())
+                    (solicitud.getTipoIdentificacion().getCodigoTarjeta() != 0 && solicitud.getIdentificacion().trim().isEmpty()
                             && solicitud.getIdentificacion().length() > 0  && solicitud.getIdentificacion().length() < 8)) {
                 res = false;
             }
@@ -204,15 +222,9 @@ public class SolicitudController {
     }
 
     private boolean validarSolicitudVivienda(Solicitud solicitud) {
-        boolean res = true;
-        if(!solicitud.getSubtipo().contains(solicitud.getTipo()) ||
+        return !(!solicitud.getSubtipo().contains(solicitud.getTipo()) ||
                 solicitud.getHoja() == null ||
-                solicitud.getSolicitante() == null)
-        {
-            res = false;
-        }
-
-        return res;
+                solicitud.getSolicitante() == null);
     }
     // Métodos para los administradores
 
