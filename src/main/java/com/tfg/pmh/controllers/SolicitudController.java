@@ -7,11 +7,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
 
@@ -37,7 +35,7 @@ public class SolicitudController {
     private IdentificacionService identificacionService;
 
     @Autowired
-    private AdministradorService administradorService;
+    private CalleService calleService;
 
     @Autowired
     private OperacionService operacionService;
@@ -171,7 +169,7 @@ public class SolicitudController {
 
     }
 
-    @GetMapping("/numeracion/all")
+    @GetMapping("/habitante/numeracion/all")
     public Respuesta getAllNumeraciones() {
         Respuesta respuesta = new Respuesta();
         try {
@@ -185,7 +183,35 @@ public class SolicitudController {
         return respuesta;
     }
 
-    @GetMapping("/hojas/{numeracionId}")
+    @GetMapping("/habitante/viviendas/all")
+    public Respuesta getAllCalles(@RequestParam("munId") Long munId) {
+        Respuesta res = new Respuesta();
+        try {
+            res.setStatus(200);
+            res.setObject(this.calleService.getCallesByMunicipioId(munId));
+        } catch (Exception e) {
+            res.setStatus(404);
+            res.setObject(null);
+        }
+
+        return res;
+    }
+
+    @GetMapping("/habitante/numeraciones/{calleId}")
+    public Respuesta getNumeracionesByCalleId(@PathVariable Long calleId) {
+        Respuesta res = new Respuesta();
+        try {
+            res.setStatus(200);
+            res.setObject(this.numeracionService.findByCalleId(calleId));
+        } catch (Exception e) {
+            res.setStatus(404);
+            res.setObject(null);
+        }
+
+        return res;
+    }
+
+    @GetMapping("/habitante/hojas/{numeracionId}")
     public Respuesta getAllHojasByNumeracionId(@PathVariable Long numeracionId) {
         Respuesta res = new Respuesta();
         try {
