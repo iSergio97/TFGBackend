@@ -28,4 +28,7 @@ public class Calle implements Serializable {
 
     @NotBlank
     private String nombre;
+
+    @NotBlank
+    private String tipo;
 }

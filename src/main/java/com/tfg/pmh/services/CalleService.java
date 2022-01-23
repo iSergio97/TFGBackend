@@ -28,4 +28,6 @@ public class CalleService {
     public List<Calle> getCallesByMunicipioId(Long id) {
         return this.repository.getCalleByMunicipioId(id);
     }
+
+    public List<Calle> getCallesByTipo(String calleTipo) { return this.repository.getCallesByTipo(calleTipo); }
 }

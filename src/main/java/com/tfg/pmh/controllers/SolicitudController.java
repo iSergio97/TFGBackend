@@ -57,6 +57,9 @@ public class SolicitudController {
             if(solicitud.getTipoIdentificacion() != null && solicitud.getTipoIdentificacion().getId() != null) {
                 solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
             }
+            if(solicitud.getHoja().getId() != null) {
+                solicitud.setHoja(this.hojaService.findById(solicitud.getHoja().getId()));
+            }
             switch (solicitud.getTipo()){
                 case "A":
                     res = validarSolicitudVivienda(solicitud);
@@ -93,12 +96,6 @@ public class SolicitudController {
             respuesta = new Respuesta(400, null);
         }
         return respuesta;
-    }
-
-    @PostMapping("/prueba")
-    public void pruebaPrueba(@RequestBody Habitante habitante) {
-        boolean a = true;
-        boolean b = false;
     }
 
     @GetMapping("/habitante/mine")
@@ -197,6 +194,20 @@ public class SolicitudController {
         return res;
     }
 
+    @GetMapping("/habitante/calles/{calleTipo}")
+    public Respuesta getCallesByName(@PathVariable("calleTipo") String calleTipo) {
+        Respuesta res = new Respuesta();
+        try {
+            res.setStatus(200);
+            res.setObject(this.calleService.getCallesByTipo(calleTipo));
+        } catch (Exception e) {
+            res.setStatus(404);
+            res.setObject(null);
+        }
+
+        return res;
+    }
+
     @GetMapping("/habitante/numeraciones/{calleId}")
     public Respuesta getNumeracionesByCalleId(@PathVariable Long calleId) {
         Respuesta res = new Respuesta();
@@ -248,9 +259,7 @@ public class SolicitudController {
     }
 
     private boolean validarSolicitudVivienda(Solicitud solicitud) {
-        return !(!solicitud.getSubtipo().contains(solicitud.getTipo()) ||
-                solicitud.getHoja() == null ||
-                solicitud.getSolicitante() == null);
+        return solicitud.getSubtipo().contains(solicitud.getTipo()) && solicitud.getHoja() != null && solicitud.getSolicitante() != null;
     }
     // Métodos para los administradores
 

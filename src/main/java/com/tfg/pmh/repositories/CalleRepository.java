@@ -10,4 +10,6 @@ import java.util.List;
 public interface CalleRepository extends JpaRepository<Calle, Long> {
 
     List<Calle> getCalleByMunicipioId(Long id);
+
+    List<Calle> getCallesByTipo(String tipo);
 }
