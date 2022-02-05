@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,6 +50,22 @@ public class HabitanteController {
         } catch (Exception e) {
             // Excepción controlada
             res = new Respuesta(350, null);
+        }
+
+        return res;
+    }
+
+    @GetMapping("/convivientes/{hojaId}/{hoja}")
+    public Respuesta convivientes(@PathVariable("hojaId") Long hojaId, @PathVariable("hoja") Long hoja) {
+        Respuesta res = new Respuesta();
+        try {
+            // Buscamos la habitante que viven con este usuario (por hojaId y hoja)
+            Collection<Habitante> convivientes = this.habitanteService.findConvivientes(hojaId, hoja);
+            res.setStatus(200);
+            res.setObject(convivientes);
+        } catch (Exception e) {
+            res.setObject(null);
+            res.setStatus(400);
         }
 
         return res;

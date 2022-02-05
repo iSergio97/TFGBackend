@@ -57,7 +57,7 @@ public class SolicitudController {
             if(solicitud.getTipoIdentificacion() != null && solicitud.getTipoIdentificacion().getId() != null) {
                 solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
             }
-            if(solicitud.getHoja().getId() != null) {
+            if(solicitud.getHoja() != null) {
                 solicitud.setHoja(this.hojaService.findById(solicitud.getHoja().getId()));
             }
             switch (solicitud.getTipo()){
@@ -336,6 +336,8 @@ public class SolicitudController {
             solicitante.setTarjetaIdentificacion(solicitud.getTipoIdentificacion());
             operacion.setTipoIdentificacion(solicitud.getTipoIdentificacion());
         } else {
+            // Corregir esto. Las nuevas operaciones deben crear una hoja nueva en el mismo domicilio.
+            // Por tanto, aquí iría la creación de una nueva hoja del domicilio solicitado
             solicitante.setHoja(solicitud.getHoja());
             operacion.setHoja(solicitud.getHoja());
         }

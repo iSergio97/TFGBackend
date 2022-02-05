@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,8 +33,8 @@ public class HabitanteService {
 
     // Cambiado a Collection para evitar la creacion de la clase familia
     // Ya que una familia son aquellas personas que viven en el mismo domicilio
-    public Collection<Habitante> findByViviendaId(Long id) {
-        return this.repository.findHabitanteByHojaId(id);
+    public Collection<Habitante> findConvivientes(Long hojaId, Long hoja) {
+        return this.repository.findConvivientes(hojaId, hoja);
     }
 
     public Habitante findByUsername(String username) {

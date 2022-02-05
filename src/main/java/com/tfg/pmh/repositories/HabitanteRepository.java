@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface HabitanteRepository extends JpaRepository<Habitante, Long> {
 
-    @Query("SELECT H FROM Habitante  H WHERE H.Hoja.id = ?1")
-    Collection<Habitante> findHabitanteByHojaId(Long id);
+    @Query("SELECT H FROM Habitante  H WHERE H.Hoja.id = ?1 AND H.Hoja.hoja = ?2")
+    Collection<Habitante> findConvivientes(Long hojaId, Long hoja);
 
     @Query("SELECT H FROM Habitante H WHERE H.cuentaUsuario.username = ?1")
     Habitante findByUsername(String username);

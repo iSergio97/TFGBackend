@@ -68,5 +68,9 @@ public class Solicitud implements Serializable {
     @Valid
     @OneToMany
     private List<Documento> documentos;
+
+    @Valid
+    @OneToMany
+    private List<Habitante> grupo;
     
 }
