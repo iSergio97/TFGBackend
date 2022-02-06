@@ -33,8 +33,8 @@ public class HabitanteService {
 
     // Cambiado a Collection para evitar la creacion de la clase familia
     // Ya que una familia son aquellas personas que viven en el mismo domicilio
-    public Collection<Habitante> findConvivientes(Long hojaId, Long hoja) {
-        return this.repository.findConvivientes(hojaId, hoja);
+    public Collection<Habitante> findConvivientes(Long hojaId, Integer hoja, Long habId) {
+        return this.repository.findConvivientes(hojaId, hoja, habId);
     }
 
     public Habitante findByUsername(String username) {

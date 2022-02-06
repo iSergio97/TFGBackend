@@ -25,4 +25,16 @@ public class HojaService {
     public List<Hoja> findByNumeracion(Long id) {
         return this.repository.findByNumeracion(id);
     }
+
+    public Integer maxHojaByNumeracion(Long id) {
+        return this.repository.maxHojaByNumeracion(id);
+    }
+
+    public Hoja create(Numeracion numeracion) {
+        Hoja hoja = new Hoja();
+        hoja.setNumeracion(numeracion);
+        Integer nuevaHoja = maxHojaByNumeracion(numeracion.getId());
+        hoja.setHoja( nuevaHoja + 1);
+        return hoja;
+    }
 }

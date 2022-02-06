@@ -56,11 +56,11 @@ public class HabitanteController {
     }
 
     @GetMapping("/convivientes/{hojaId}/{hoja}")
-    public Respuesta convivientes(@PathVariable("hojaId") Long hojaId, @PathVariable("hoja") Long hoja) {
+    public Respuesta convivientes(@PathVariable("hojaId") Long hojaId, @PathVariable("hoja") Integer hoja, @RequestParam("habId") Long habId) {
         Respuesta res = new Respuesta();
         try {
             // Buscamos la habitante que viven con este usuario (por hojaId y hoja)
-            Collection<Habitante> convivientes = this.habitanteService.findConvivientes(hojaId, hoja);
+            Collection<Habitante> convivientes = this.habitanteService.findConvivientes(hojaId, hoja, habId);
             res.setStatus(200);
             res.setObject(convivientes);
         } catch (Exception e) {

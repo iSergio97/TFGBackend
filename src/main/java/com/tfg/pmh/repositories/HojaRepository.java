@@ -12,4 +12,7 @@ public interface HojaRepository extends JpaRepository<Hoja, Long> {
 
     @Query("SELECT H FROM Hoja H WHERE H.numeracion.id = ?1")
     List<Hoja> findByNumeracion(Long id);
+
+    @Query("SELECT MAX(H.hoja) FROM Hoja H WHERE H.numeracion.id = ?1")
+    Integer maxHojaByNumeracion(Long id);
 }

@@ -338,8 +338,14 @@ public class SolicitudController {
         } else {
             // Corregir esto. Las nuevas operaciones deben crear una hoja nueva en el mismo domicilio.
             // Por tanto, aquí iría la creación de una nueva hoja del domicilio solicitado
-            solicitante.setHoja(solicitud.getHoja());
-            operacion.setHoja(solicitud.getHoja());
+            Hoja hoja = this.hojaService.create(solicitud.getHoja().getNumeracion()); // Creamos una nueva hoja con un número de hoja más
+            this.hojaService.save(hoja);
+            for(Habitante hab : solicitud.getGrupo()) {
+                hab.setHoja(hoja);
+                this.habitanteService.save(hab);
+            }
+            solicitante.setHoja(hoja);
+            operacion.setHoja(hoja);
         }
         this.habitanteService.save(solicitante);
         this.operacionService.save(operacion);
