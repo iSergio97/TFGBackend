@@ -340,10 +340,10 @@ public class SolicitudController {
             // Por tanto, aquí iría la creación de una nueva hoja del domicilio solicitado
             Hoja hoja = this.hojaService.create(solicitud.getHoja().getNumeracion()); // Creamos una nueva hoja con un número de hoja más
             this.hojaService.save(hoja);
-            for(Habitante hab : solicitud.getGrupo()) {
-                hab.setHoja(hoja);
-                this.habitanteService.save(hab);
-            }
+
+            solicitud.getGrupo().forEach((Habitante hab) -> hab.setHoja(hoja));
+            this.habitanteService.saveAll(solicitud.getGrupo());
+
             solicitante.setHoja(hoja);
             operacion.setHoja(hoja);
         }

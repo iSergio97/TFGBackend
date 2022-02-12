@@ -70,7 +70,7 @@ public class Solicitud implements Serializable {
     private List<Documento> documentos;
 
     @Valid
-    @OneToMany
+    @ManyToMany
     private List<Habitante> grupo;
     
 }
