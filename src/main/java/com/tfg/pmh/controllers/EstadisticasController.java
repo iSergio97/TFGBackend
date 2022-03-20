@@ -1,6 +1,7 @@
 package com.tfg.pmh.controllers;
 
 import com.tfg.pmh.models.Respuesta;
+import com.tfg.pmh.services.CalleService;
 import com.tfg.pmh.services.OperacionService;
 import com.tfg.pmh.services.SolicitudService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class EstadisticasController {
 
     @Autowired
     private SolicitudService solicitudService;
+
+    @Autowired
+    private CalleService calleService;
 
     @GetMapping("/fluctuacion")
     public Respuesta fluctuaciones() {
@@ -84,5 +88,19 @@ public class EstadisticasController {
     @GetMapping("/filter/modificacion")
     public List<Integer> habitantesConOPsModificacion() {
         return this.operacionService.estadisticasHabsModificacion();
+    }
+
+    @GetMapping("/heatmap")
+    public Respuesta mapaDeCalor() {
+        Respuesta res = new Respuesta();
+        try {
+            res.setStatus(200);
+            res.setObject(this.calleService.mapaDeCalor());
+        } catch (Exception e) {
+            res.setStatus(404);
+            res.setObject(null);
+        }
+        return res;
+
     }
 }

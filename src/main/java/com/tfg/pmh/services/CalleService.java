@@ -1,11 +1,13 @@
 package com.tfg.pmh.services;
 
+import com.tfg.pmh.forms.MapaCalor;
 import com.tfg.pmh.models.Calle;
 import com.tfg.pmh.repositories.CalleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CalleService {
@@ -30,4 +32,6 @@ public class CalleService {
     }
 
     public List<Calle> getCallesByTipo(String calleTipo) { return this.repository.getCallesByTipo(calleTipo); }
+
+    public List<MapaCalor> mapaDeCalor() { return this.repository.mapaDeCalor(); }
 }
