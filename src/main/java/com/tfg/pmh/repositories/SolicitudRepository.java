@@ -1,6 +1,8 @@
 package com.tfg.pmh.repositories;
 
+import com.tfg.pmh.forms.SolicitudesPorFecha;
 import com.tfg.pmh.models.Solicitud;
+import com.tfg.pmh.services.SolicitudService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -22,6 +24,6 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
     @Query("SELECT COUNT(S) FROM Solicitud S")
     Long contadorSolicitudes();
 
-    @Query("SELECT S.fecha, COUNT(S) FROM Solicitud S GROUP BY MONTH(S.fecha)")
-    Object[] solicitudesPorFecha();
+    @Query("SELECT S.fecha as fechas, COUNT(S) as cantidades FROM Solicitud S WHERE S.fecha BETWEEN ?1 AND ?2 GROUP BY DAY(S.fecha)")
+    List<SolicitudesPorFecha> solicitudesPorFecha(Date start, Date end);
 }

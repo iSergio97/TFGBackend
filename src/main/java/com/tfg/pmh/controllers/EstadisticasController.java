@@ -67,7 +67,7 @@ public class EstadisticasController {
         Respuesta res = new Respuesta();
         try {
             res.setStatus(200);
-            res.setObject(this.solicitudService.solicitudesPorMes());
+            res.setObject(this.solicitudService.solicitudesPorSemana());
         } catch (Exception e) {
             res.setStatus(404);
             res.setObject(null);
@@ -101,6 +101,5 @@ public class EstadisticasController {
             res.setObject(null);
         }
         return res;
-
     }
 }

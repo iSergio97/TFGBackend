@@ -1,5 +1,6 @@
 package com.tfg.pmh.services;
 
+import com.tfg.pmh.forms.SolicitudesPorFecha;
 import com.tfg.pmh.models.Solicitud;
 import com.tfg.pmh.repositories.SolicitudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +65,12 @@ public class SolicitudService {
         return this.repository.contadorSolicitudes();
     }
 
-    public Object[] solicitudesPorMes() {
-        return this.repository.solicitudesPorFecha();
+    public List<SolicitudesPorFecha> solicitudesPorSemana() {
+        Calendar start = Calendar.getInstance();
+        start.setTime(new Date());
+        start.add(Calendar.DAY_OF_MONTH, -7);
+        Date end = new Date();
+        return this.repository.solicitudesPorFecha(start.getTime(), end);
     }
 }
 
