@@ -5,16 +5,24 @@ import com.tfg.pmh.services.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/sistema")
@@ -56,6 +64,29 @@ public class SistemaController {
 
     @Autowired
     private CalleService calleService;
+
+    // @GetMapping("/administrador/callejero") // Comentado para evitar problemas
+    public Integer callejero() {
+        try {
+            File file = new ClassPathResource("/static/calles.txt").getFile();
+            Scanner scanner = new Scanner(file);
+            while(scanner.hasNext()) {
+                String data = scanner.nextLine().trim();
+                Calle calle = new Calle();
+                String[] split = data.split(" ");
+                calle.setTipo(split[0]);
+                split = Arrays.copyOfRange(split, 1, split.length);
+                calle.setNombre(String.join(" ", split));
+                Municipio municipio = this.municipioService.findById(3L);
+                calle.setMunicipio(municipio);
+                this.calleService.save(calle);
+            }
+            return 200;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
 
     @GetMapping("/administrador/poblate")
     public Integer poblate() throws NoSuchAlgorithmException {
@@ -268,7 +299,7 @@ public class SistemaController {
 
         Random random = new Random();
 
-        for(int i = 0; i < 9; i++) {
+        for(int i = 0; i < 250; i++) {
             try {
                 cuentaUsuario = new CuentaUsuario();
                 cuentaUsuario.setUsername("habitante"+ String.valueOf(i));
@@ -352,8 +383,11 @@ public class SistemaController {
                 identificador = this.identificadorService.findById((long) tarjeta);
                 habitante.setTarjetaIdentificacion(identificador);
                 habitante.setSexo(tarjeta % 2 == 0 ? "H" : "M");
-                numeracion = this.numeracionService.findById((long) i + 7);
-                hoja = this.hojaService.findByNumeracion(numeracion.getId());
+                random = new Random();
+                int low = 191;
+                int high = 624;
+                numeracion = this.numeracionService.findById((long) random.nextInt((high-low)) + low);
+                hoja = this.hojaService.findByNumeracion(numeracion.getId()); // TODO: Crear numeración por cada nueva hoja
                 habitante.setHoja(hoja.get(0));
 
                 this.habitanteService.save(habitante);

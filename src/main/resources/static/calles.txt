@@ -1,0 +1,434 @@
+Calle Abeto
+Calle Acacias
+Calle Aceite
+Calle Adarve
+Calle Aguabajo
+Calle Aguayo
+Calle Agustin Rivero
+Calle Alamos
+Calle Albaicin
+Calle Albarrana (La)
+Avenida Alcarrachela (De La)
+Calle Alcazar
+Calle Alfareros
+Calle Alfares
+Calle Alfonso Aragon Fofo
+Calle Algeciras
+Calle Alhambra
+Calle Almendro
+Calle Almenillas
+Calle Almonas
+Calle Alonso
+Calle Alonso Fernandez Grajera
+Calle Amadeo Vives
+Calle Amapola
+Calle Ancha
+Avenida Andalucia
+Calle Antequera
+Calle Anton de Arjona
+Calle Arabella
+Calle Arahales
+Calle Arco de Belen
+Plaza Armas
+Calle Arquillos
+Calle Arrieros
+Calle Arroyo
+Calle Artesanos
+Calle Avendaño
+Calle Azacanes
+Calle Azofaifo
+Calle Bachiller
+Calle Bañales
+Calle Barba
+Calle Barcelona
+Calle Barquete
+Calle Barrasa
+Calle Barrera de San Gregorio
+Calle Barrera Oñate
+Calle Bartolome Jimenez Torres
+Calle Bataneros
+Calle Beatas
+Calle Bellidos
+Calle Beneficiados
+Calle Berbisa
+Calle Bermuda
+Calle Bizco Pardal
+Calle Boabdil
+Calle Bodegas
+Calle Cabriteros
+Calle Cadenas
+Calle Cadiz
+Calle Calderon
+Calle Caleros
+Calle Calzada (La)
+Plaza Camilo Jose Cela
+Camino de La Fuensanta
+Camino de Las Huertas
+Calle Camino de Los Romeros
+Calle Campana (La)
+Calle Campanillas
+Calle Cañada del Rosal
+Calle Cañaveralejo
+Calle Canovas del Castillo
+Calle Capataz Gutierrez Tagua
+Calle Capilla
+Calle Carcel
+Calle Carlos Cano (De)
+Calle Carmelitas
+Calle Carmen
+Calle Carmona
+Calle Carpinteros
+Calle Carreras
+Carretera Palma del Rio
+Calle Cartuja (La)
+Calle Castaño
+Calle Castril
+Calle Caus
+Calle Cava
+Calle Cavilla
+Calle Cecilia
+Calle Celestino Montero
+Pasaje Celindas (Las)
+Calle Cerro de La Concepcion
+Calle Cerro de La Habana
+ Cerro de La Polvora
+Calle Cesareo Cambronero
+Calle Cespedes
+Calle Cesteria
+Calle Chopo
+Calle Cinteria
+Calle Cipres
+Carretera Circunvalacion (De)
+Calle Ciudad de Aranjuez
+Ciudad de Las Torres
+Calle Clara Campoamor
+Plaza Colon
+Barriada Colonda
+Calle Comedias
+Calle Compañia
+Calle Compositor Juan Bermudo
+Calle Concordia (De La)
+Calle Conde
+Avenida Constitucion (De La)
+Calle Cordoba
+Calle Cordobes
+Calle Coronado
+Avenida Cristo de Confalon
+Calle Cronista Martin Jimenez
+Calle Cuatro de Diciembre
+Calle Curtidores
+Calle Delgadillo
+Calle Diamantino Garcia
+Calle Doctor Benitez
+Avenida Doctor Fleming
+Calle Doctor Jimenez de Lorite
+Avenida Doctor Sanchez Malo
+Calle Doctrina
+Calle Dolores Ibarruri
+Calle Dos Pozos
+Calle Drago
+Calle Ebanistas
+Calle Ebano
+Calle Elvira
+Avenida Emigrantes (Los)
+Calle Emilio Castelar
+Calle Emparedamiento
+Calle Empedrada
+Calle Encina
+Calle Enrique El Gandinga
+Calle Escritor Mas Y Laglera
+Calle Eslava
+Calle Espada
+Plaza España
+Calle Espiritu Santo
+Calle Estatuto de Autonomia
+Calle Estepa
+Calle Eugenio D'ors
+Plaza Europa (De)
+Calle Evaristo Espinosa
+Calle Feria
+Calle Fernandez Pintado
+Calle Fernando Iii
+Calle Fernando Labrada
+Avenida Ferrocarril (Del)
+Ronda Ferrocarril (El)
+Calle Fiel
+Camino Fisico
+Calle Flores
+Calle Forjadores
+Calle Francia
+Calle Francos
+Calle Fray Agustin de Los Reyes
+Calle Fray Juan Bermudo
+Calle Fresno
+Barriada Fuensanta (La)
+Calle Fuente Nueva
+Calle Fuentes de Andalucia
+Barriada Funcionarios 80 Viviendas
+Calle Gabriela Mistral
+Calle Galindo
+Calle Gameras
+Calle Garay Y Conde
+Calle Garci Sanchez
+Calle Garcilaso
+Calle Garcilopez
+Calle General Weyler
+Calle Generalife
+Avenida Genil (Del)
+Plaza Giles Y Rubio
+Urbanización Girasoles (Los)
+Calle Gonzalo
+Calle Granada
+Calle Guadalajara
+Calle Guarnicioneros
+Calle Guerra
+Calle Guillermo Gutierrez
+Calle Haya
+Calle Henchideros
+Calle Hernan Perez
+Calle Herrera
+Calle Hist Padre Martin Roa
+Calle Horno
+Calle Hospital
+Calle Hospitalet
+Calle Huelva
+Ronda Huertas (De Las)
+Calle Huerto
+Calle Ignacio de Soto
+Calle Ignacio Ellacuria
+Calle Impresor Juan Los Reyes
+Calle Isaac Albeniz
+Calle Isaac Peral
+Calle Isadora Duncan
+Calle Italia
+Calle Jaen
+Calle Jaime Ostos
+Avenida Jeronimo de Aguilar
+Calle Jesus del Gran Poder
+Calle Jesus Nazareno
+Calle Jesus Sin Soga
+Calle Joaquin Rodrigo
+Calle Joaquin Turina
+Avenida John Lennon
+Calle Jorge Manrique
+Calle Jose Canalejas
+Calle Jovar
+Calle Juan de Angulo
+Calle Juan Diaz Custodio
+Calle Juan Muñoz
+Calle Juan Paez
+Calle Juan Xxiii
+Calle Julianes
+Calle Jurado
+Calle Lebrija
+Calle Leonis
+Calle Leonor
+Avenida Limero
+Calle Lopez
+Calle Lorenzo Lucena
+Calle Loza
+Calle Lucas
+Calle Luisiana
+Calle Luna
+Calle Luque
+Calle Maestre
+Calle Malaga
+Calle Malaliño
+Calle Mandoble
+Calle Manuel de Falla
+Calle Manuel Ostos Y Ostos
+Calle Manuel Romero Nieto
+Calle Marchena
+Calle Margarita Xirgu
+Avenida Maria Auxiliadora
+Calle Maria Curie
+Calle Maria de La O Lejarraga
+Calle Maria Guerrero
+Calle Maria Zambrano
+Calle Mariana Pineda
+Calle Maritorija
+Calle Marmoles
+Calle Marquesa (La)
+Calle Mas Y Prat
+Plaza Matadero
+Calle Mayor
+Calle Mendoza
+Calle Merced
+Calle Merinos
+Calle Mezquita
+Avenida Miguel de Cervantes
+Pasaje Milagrosa (La)
+Calle Minarete
+Calle Miragenil
+Ronda Molinos (De Los)
+Calle Moreria
+Calle Mortecina
+Calle Mostaceros
+Calle Mujeres Jornaleras
+Calle Najeras
+Calle Naranjillos
+Calle Nardo
+Calle Navajas
+Calle Nogal
+Calle Norias (Las)
+Plaza Ntra Sra de Los Dolores
+Plaza Nuestra Señora del Valle
+Avenida Nuestra Señora del Valle
+Calle Nueva
+Barriada Nueva Andalucia
+Calle Olivares
+Calle Olmo
+Plaza Opera (De La)
+Calle Ostos
+Calle Pacheco
+Calle Padilla
+Urbanización Palmeras (Las)
+Calle Palo Santo
+Calle Paloma
+Calle Palomar
+Calle Panaderos
+Calle Paraiso
+Calle Pardillo
+Calle Pardo
+Calle Parralejos
+Calle Parteras
+Ronda Paz (De La)
+Barriada Paz (La)
+Calle Pedregosa
+Calle Pensamiento
+Calle Pepe Luis Vargas
+Calle Pepita Tomas
+Calle Perdiz
+Calle Peso
+Calle Petra Kelly
+Calle Picadero Bajo
+Calle Picador
+Calle Pilar Miro
+Calle Pilarejo
+Calle Pinichi
+Calle Pino
+Calle Pintor Fernando Briones
+Calle Pinzapo
+Calle Pio Xii
+Calle Plateria
+Avenida Plaza de Toros
+Calle Poeta Balmaseda Gonzalez
+Calle Poeta Manolo Mora
+Calle Poligono Ind El Limero
+Calle Portugal
+Calle Pozo
+Calle Pract Romero GordilloProfesor Collantes Teran
+Calle Profesor Hernandez Diaz
+Calle Profesor Sancho Corbacho
+Calle Pueblo Saharaui
+Calle Puente
+Plaza Puerta Cerrada
+Calle Puerta Nueva
+Plaza Puerta Osuna
+Calle Pulgosa
+Plaza Quintana
+Calle Rafael Maria Aguilar
+Calle Ramon Y Cajal
+Calle Ramos
+Calle Recogidas
+Calle Regidor
+Calle Reina
+Calle Rejano
+Calle Rejas (Las)
+Calle Rejon
+Calle Reloj
+Calle Residencial Astigi
+Calle Residencial Confalon
+Calle Rigoberta Menchu
+Calle Rinconada
+Calle Rio
+Calle Rio Blanco
+Calle Rio Cabra
+Calle Roble
+Calle Rocio
+Calle Rodriguez Marin
+Calle Rojas
+Calle Ronda San Agustin
+Calle Rosales
+Calle Rosario
+Calle Rueda
+Calle Ruimartin
+Calle Sacromonte
+Calle Salas
+Calle Saltadero
+Calle Salto
+Calle San Antonio
+Calle San Bartolome
+Calle San Benito
+Calle San Cristobal
+Calle San Francisco de Écija
+Calle San Fulgencio
+Plaza San Gil
+Calle San Gregorio
+Plaza San Juan
+Calle San Juan Bosco
+Calle San Marcos
+Calle San Pablo
+Barriada Santa Ana
+Calle Santa Angela de La Cruz
+Calle Santa Beatriz de Silva
+Calle Santa Brigida
+Calle Santa Catalina
+Calle Santa Cruz
+Calle Santa Florentina
+Calle Santa Ines
+Plaza Santa Irene
+Plaza Santa Maria
+Calle Santiago
+Santo Domingo
+Calle Sauce
+Calle Secretario Armesto
+Calle Severo Ochoa
+Calle Sevilla
+Calle Sol
+Calle Soledad
+Calle Sor Candida Sainz Alonso
+Calle Soria
+Calle Sumidero
+Calle Tarancon
+Calle Tello
+Calle Teresa de Calcuta
+Plaza Tolerancia
+Plaza Tolerancia (De La)
+Avenida Tomas Bevia
+Calle Torcal
+Avenida Toreros (Los)
+Plaza Toros
+Calle Torres Quevedo
+Calle Tortola
+Calle Trascampanario
+Calle Tres Cruces
+Calle Useras
+Calle Vacas
+Calle Valderrama
+Calle Valle (Del)
+Calle Vega
+Calle Velez de Guevara
+Plaza Velez de Guevara
+Calle Ventorrillo
+Calle Vicente Alexandre
+Calle Victoria (La)
+Calle Victoria Kent
+Calle Victoriano Valpuesta
+Calle Vidal
+Calle Villa de Madrid
+Calle Villa Pavillon Sous Bois
+Calle Villalatas
+Calle Villarreal
+Calle Villates
+Calle Violetas
+Calle Virgen de La Piedad
+Pasaje Virgen de Soterraño
+Pasaje Virgen del Rocio
+Calle Virgenes
+Calle Yepes
+Calle Zamorano
+Calle Zapateros
+Plaza Zarzuela
+Calle Zayas
+Calle Zurcideras
