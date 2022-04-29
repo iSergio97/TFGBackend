@@ -299,6 +299,8 @@ public class SistemaController {
 
         Random random = new Random();
 
+        crearNumeracion();
+
         for(int i = 0; i < 250; i++) {
             try {
                 cuentaUsuario = new CuentaUsuario();
@@ -383,11 +385,13 @@ public class SistemaController {
                 identificador = this.identificadorService.findById((long) tarjeta);
                 habitante.setTarjetaIdentificacion(identificador);
                 habitante.setSexo(tarjeta % 2 == 0 ? "H" : "M");
-                random = new Random();
                 int low = 191;
                 int high = 624;
-                numeracion = this.numeracionService.findById((long) random.nextInt((high-low)) + low);
-                hoja = this.hojaService.findByNumeracion(numeracion.getId()); // TODO: Crear numeración por cada nueva hoja
+                random = new Random();
+                Long calleId = (long) random.nextInt((high-low)) + low;
+                List<Numeracion> ls = this.numeracionService.findByCalleId(calleId);
+                numeracion = ls.get(random.nextInt(ls.size() - 1) + 1);
+                hoja = this.hojaService.findByNumeracion(numeracion.getId());
                 habitante.setHoja(hoja.get(0));
 
                 this.habitanteService.save(habitante);
@@ -398,6 +402,26 @@ public class SistemaController {
                 throw e;
             }
         }
+    }
+
+    private void crearNumeracion() {
+        List<Calle> calles = this.calleService.findAll();
+            calles.forEach((calle) -> {
+            for(int i = 0; i < 4; i++) {
+                int high = 50;
+                int low = 1;
+                Random random = new Random();
+                int numero = random.nextInt((high-low)) + low;
+                Numeracion numeracion = new Numeracion();
+                numeracion.setCalle(calle);
+                numeracion.setNumero(numero);
+                this.numeracionService.save(numeracion);
+                Hoja hoja = new Hoja();
+                hoja.setNumeracion(numeracion);
+                hoja.setHoja(i);
+                this.hojaService.save(hoja);
+            }
+        });
     }
 
     private String hashText(String text) {

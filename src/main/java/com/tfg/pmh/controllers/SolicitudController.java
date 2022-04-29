@@ -79,6 +79,7 @@ public class SolicitudController {
             if(res) {
                 if (solicitud.getDocumentos().size() == 0) {
                     // Se ha decidido rechazar directamente la solicitud por no haber adjuntado documentos.
+                    // Por aquí no debería salir
                     solicitud.setEstado("R");
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA POR NO ADJUNTAR DOCUMENTOS. SI CREE QUE ES UN ERROR DEL SISTEMA. REALICE OTRA SOLICITUD NUEVA.");
                 } else if("MV".equals(solicitud.getSubtipo()) && solicitud.getSolicitante().getHoja() == null) {
@@ -89,7 +90,7 @@ public class SolicitudController {
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA SI TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA");
                 }
                 this.service.save(solicitud);
-                Solicitud sol = this.service.findById(solicitud.getId()); // Corregir error de que no se guardan las solicitudes de MD con identificación vacía
+                Solicitud sol = this.service.findById(solicitud.getId());
                 respuesta = new Respuesta(200, sol);
             }
         } catch (Exception e) {
@@ -97,6 +98,35 @@ public class SolicitudController {
         }
         return respuesta;
     }
+
+    @PostMapping(value = "/habitante/edit/{id}")
+    public Respuesta editarSolicitudHabitante(@PathVariable("id") Long id, @RequestParam ("justificacion") String justificacion){
+        Respuesta respuesta = null;
+        Solicitud solicitud;
+        try {
+            respuesta = new Respuesta();
+            solicitud = this.service.findById(id);
+
+            if(!solicitud.getEstado().equals("P")) {
+                respuesta.setObject(null);
+                respuesta.setStatus(405);
+
+                return respuesta;
+            }
+
+            solicitud.setJustificacionHab(justificacion);
+            solicitud.setFecha(new Date()); // Le ponemos la nueva fecha tras editarlo
+
+            this.service.save(solicitud);
+            respuesta.setStatus(200);
+            respuesta.setObject(solicitud);
+        } catch (Exception e) {
+            respuesta = new Respuesta(400, null);
+        }
+        return respuesta;
+    }
+
+
 
     @GetMapping("/habitante/mine")
     public Respuesta getSolicitudesDeHab(@RequestParam("userId") Long userId) {
@@ -145,6 +175,30 @@ public class SolicitudController {
                 this.documentService.save(document);
                 documentoList.add(document);
             }
+            return new ResponseEntity<>(documentoList, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value= "/document/edit{id}", consumes = {"multipart/form-data"})
+    public ResponseEntity<List<Documento>> editUploadFiles(@RequestParam("file") MultipartFile[] file, @PathVariable("id") Long id) {
+        try {
+            List<Documento> documentoList = new ArrayList<>();
+            Documento document;
+            for (MultipartFile multipartFile : file) {
+                document = new Documento();
+
+                document.setName(multipartFile.getOriginalFilename());
+                document.setData(multipartFile.getBytes());
+                this.documentService.save(document);
+                documentoList.add(document);
+            }
+
+            Solicitud solicitud = this.service.findById(id);
+            solicitud.setDocumentos(documentoList);
+            this.service.save(solicitud);
+
             return new ResponseEntity<>(documentoList, HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -289,6 +343,7 @@ public class SolicitudController {
         }
         return res;
     }
+
 
     @PostMapping("/administrador/update")
     public Respuesta updateSolicitud(@RequestParam("solicitudId") Long solicitudId, @RequestParam("estado") String estado, @RequestParam("justificacion") String justificacion) {

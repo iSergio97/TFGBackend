@@ -31,6 +31,8 @@ public class Solicitud implements Serializable {
 
     private String justificacion;
 
+    private String justificacionHab;
+
     @Pattern(regexp = "^[AM]$")
     @NotBlank
     private String tipo;
