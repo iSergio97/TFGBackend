@@ -4,6 +4,7 @@ import com.tfg.pmh.models.*;
 import com.tfg.pmh.services.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.GrantedAuthority;
@@ -65,7 +66,7 @@ public class SistemaController {
     @Autowired
     private CalleService calleService;
 
-    // @GetMapping("/administrador/callejero") // Comentado para evitar problemas
+    @GetMapping("/administrador/callejero") // Comentado para evitar problemas
     public Integer callejero() {
         try {
             File file = new ClassPathResource("/static/calles.txt").getFile();
@@ -385,8 +386,8 @@ public class SistemaController {
                 identificador = this.identificadorService.findById((long) tarjeta);
                 habitante.setTarjetaIdentificacion(identificador);
                 habitante.setSexo(tarjeta % 2 == 0 ? "H" : "M");
-                int low = 191;
-                int high = 624;
+                int low = 451;
+                int high = 884;
                 random = new Random();
                 Long calleId = (long) random.nextInt((high-low)) + low;
                 List<Numeracion> ls = this.numeracionService.findByCalleId(calleId);
@@ -404,6 +405,22 @@ public class SistemaController {
         }
     }
 
+    @GetMapping("numeracion/geocoding")
+    public List<Numeracion> getNumeracionAll() {
+        return this.numeracionService.findAll();
+    }
+
+    @PostMapping("/numeracion/geocoding")
+    public void completarDireccion(@RequestParam("lat") Double lat, @RequestParam("lng") Double lng, @RequestParam("idNumeracion") Long idNumeracion) {
+        Numeracion num = this.numeracionService.findById(idNumeracion);
+        if(num.getLat() == null) {
+            System.out.println("Entra y guarda el objeto con id: " + idNumeracion);
+            num.setLat(lat);
+            num.setLng(lng);
+            this.numeracionService.save(num);
+        }
+    }
+
     private void crearNumeracion() {
         List<Calle> calles = this.calleService.findAll();
             calles.forEach((calle) -> {
@@ -415,6 +432,8 @@ public class SistemaController {
                 Numeracion numeracion = new Numeracion();
                 numeracion.setCalle(calle);
                 numeracion.setNumero(numero);
+                String referenciaCatastral = UUID.randomUUID().toString().replace("-", "").substring(0, 20);
+                numeracion.setReferenciaCatastral(referenciaCatastral);
                 this.numeracionService.save(numeracion);
                 Hoja hoja = new Hoja();
                 hoja.setNumeracion(numeracion);

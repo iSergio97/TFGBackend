@@ -2,6 +2,7 @@ package com.tfg.pmh.controllers;
 
 import com.tfg.pmh.models.*;
 import com.tfg.pmh.services.*;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/solicitud")
@@ -162,6 +164,11 @@ public class SolicitudController {
         return null;
     }
 
+    @GetMapping("/habitante/calles/tipo")
+    public List<String> tiposDeCalle() {
+        return this.calleService.tiposDeCalle();
+    }
+
     @PostMapping(value= "/document/new", consumes = {"multipart/form-data"})
     public ResponseEntity<List<Documento>> uploadFile(@RequestParam("file") MultipartFile[] file) {
         try {
@@ -181,7 +188,7 @@ public class SolicitudController {
         }
     }
 
-    @PostMapping(value= "/document/edit{id}", consumes = {"multipart/form-data"})
+    @PostMapping(value= "/document/edit/{id}", consumes = {"multipart/form-data"})
     public ResponseEntity<List<Documento>> editUploadFiles(@RequestParam("file") MultipartFile[] file, @PathVariable("id") Long id) {
         try {
             List<Documento> documentoList = new ArrayList<>();
@@ -194,7 +201,6 @@ public class SolicitudController {
                 this.documentService.save(document);
                 documentoList.add(document);
             }
-
             Solicitud solicitud = this.service.findById(id);
             solicitud.setDocumentos(documentoList);
             this.service.save(solicitud);
@@ -267,7 +273,9 @@ public class SolicitudController {
         Respuesta res = new Respuesta();
         try {
             res.setStatus(200);
-            res.setObject(this.numeracionService.findByCalleId(calleId));
+            List<Numeracion> numeraciones = this.numeracionService.findByCalleId(calleId);
+            numeraciones.sort(Comparator.comparing(Numeracion::getNumero, Comparator.naturalOrder()));
+            res.setObject(numeraciones);
         } catch (Exception e) {
             res.setStatus(404);
             res.setObject(null);
@@ -285,6 +293,21 @@ public class SolicitudController {
         } catch (Exception e) {
             res.setStatus(404);
             res.setObject(null);
+        }
+
+        return res;
+    }
+
+    @GetMapping("/habitante/numeraciones/rc")
+    public Respuesta getDomicilioPorRC(@RequestParam("referenciaCatastral") String referenciaCatastral) {
+        Respuesta res = new Respuesta();
+        try {
+            Numeracion numeracion = this.numeracionService.findNumeracionByReferenciaCatastral(referenciaCatastral);
+            res.setObject(numeracion);
+            res.setStatus(200);
+        } catch (Exception e) {
+            res.setObject(null);
+            res.setStatus(404);
         }
 
         return res;

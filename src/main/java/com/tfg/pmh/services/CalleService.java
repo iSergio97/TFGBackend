@@ -34,4 +34,6 @@ public class CalleService {
     public List<Calle> getCallesByTipo(String calleTipo) { return this.repository.getCallesByTipo(calleTipo); }
 
     public List<MapaCalor> mapaDeCalor() { return this.repository.mapaDeCalor(); }
+
+    public List<String> tiposDeCalle() { return this.repository.tiposDeCalle(); }
 }

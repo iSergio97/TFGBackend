@@ -18,4 +18,7 @@ public interface CalleRepository extends JpaRepository<Calle, Long> {
 
     @Query("SELECT H.Hoja.numeracion.calle.nombre as calle, COUNT(H.Hoja.numeracion.calle.nombre) as cantidad FROM Habitante H GROUP BY H.Hoja.numeracion.calle.nombre")
     List<MapaCalor> mapaDeCalor();
+
+    @Query("SELECT DISTINCT C.tipo FROM Calle C")
+    List<String> tiposDeCalle();
 }

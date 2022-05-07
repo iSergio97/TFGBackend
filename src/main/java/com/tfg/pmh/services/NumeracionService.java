@@ -29,4 +29,6 @@ public class NumeracionService {
     }
 
     public List<Numeracion> findByCalleId(Long calleId) { return this.repository.findNumeracionByCalleId(calleId); }
+
+    public Numeracion findNumeracionByReferenciaCatastral(String referenciaCatastral) { return this.repository.findNumeracionByReferenciaCatastral(referenciaCatastral); }
 }

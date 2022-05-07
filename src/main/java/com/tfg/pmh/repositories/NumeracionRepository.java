@@ -11,4 +11,6 @@ import java.util.List;
 public interface NumeracionRepository extends JpaRepository<Numeracion, Long> {
 
     List<Numeracion> findNumeracionByCalleId(Long calleId);
+
+    Numeracion findNumeracionByReferenciaCatastral(String referenciaCatastral);
 }
