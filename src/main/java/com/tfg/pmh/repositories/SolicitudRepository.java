@@ -1,6 +1,8 @@
 package com.tfg.pmh.repositories;
 
 import com.tfg.pmh.forms.SolicitudesPorFecha;
+import com.tfg.pmh.models.Hoja;
+import com.tfg.pmh.models.Operacion;
 import com.tfg.pmh.models.Solicitud;
 import com.tfg.pmh.services.SolicitudService;
 import org.springframework.data.jpa.repository.JpaRepository;

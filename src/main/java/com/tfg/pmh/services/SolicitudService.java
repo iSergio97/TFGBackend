@@ -1,8 +1,10 @@
 package com.tfg.pmh.services;
 
 import com.tfg.pmh.forms.SolicitudesPorFecha;
+import com.tfg.pmh.models.Operacion;
 import com.tfg.pmh.models.Solicitud;
 import com.tfg.pmh.repositories.SolicitudRepository;
+import com.tfg.pmh.repositories.SolicitudesMapa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

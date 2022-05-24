@@ -410,15 +410,29 @@ public class SistemaController {
         return this.numeracionService.findAll();
     }
 
-    @PostMapping("/numeracion/geocoding")
+    // @PostMapping("/numeracion/geocoding")
     public void completarDireccion(@RequestParam("lat") Double lat, @RequestParam("lng") Double lng, @RequestParam("idNumeracion") Long idNumeracion) {
         Numeracion num = this.numeracionService.findById(idNumeracion);
         if(num.getLat() == null) {
-            System.out.println("Entra y guarda el objeto con id: " + idNumeracion);
             num.setLat(lat);
             num.setLng(lng);
             this.numeracionService.save(num);
         }
+    }
+
+    @GetMapping("/operacion/heatmap")
+    public Respuesta heatMap() {
+        Respuesta res = new Respuesta();
+        try {
+            // Lista que comprenden las operaciones de los 3 últimos años
+            List<List<Operacion>> listaDeLista = this.operacionService.mapaDeCalor();
+            res.setStatus(200);
+            res.setObject(listaDeLista);
+        } catch (Exception e) {
+            res.setStatus(400);
+            res.setObject(null);
+        }
+        return res;
     }
 
     private void crearNumeracion() {
