@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,7 +67,7 @@ public class SistemaController {
     @Autowired
     private CalleService calleService;
 
-    @GetMapping("/administrador/callejero") // Comentado para evitar problemas
+    // @GetMapping("/administrador/callejero")
     public Integer callejero() {
         try {
             File file = new ClassPathResource("/static/calles.txt").getFile();
@@ -87,6 +88,53 @@ public class SistemaController {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    @GetMapping("/administrador/generateOPs")
+    public Integer generarOperaciones() {
+        Date start = new Date();
+        int actualYear = start.getYear();
+        start.setDate(1);
+        start.setMonth(Calendar.JANUARY);
+
+        Date end = new Date();
+        end.setDate(31);
+        end.setMonth(Calendar.DECEMBER);
+
+        for(int i = 3; i > 0; i--) {
+            start.setYear(actualYear - i);
+            end.setYear(actualYear - i);
+            for(int j = 0; j < 400; j++) {
+                Date randomDate = new Date(ThreadLocalRandom.current().nextLong(start.getTime(), end.getTime()));
+                Operacion op = new Operacion();
+                long randomId = (long) (Math.random() * (12734 - 11876 + 1) + 11876);
+                while(randomId % 2 != 0) {
+                    randomId = (long) (Math.random() * (12734 - 11876 + 1) + 11876);
+                }
+                Habitante randomHab = this.habitanteService.findById(randomId);
+                long randomIdHoja = (long) (Math.random() * (11874 - 890 + 1) + 890);
+                while(randomIdHoja % 2 != 0) {
+                    randomIdHoja = (long) (Math.random() * (11874 - 890 + 1) + 890);
+                }
+                Hoja randomHoja = this.hojaService.findById(randomIdHoja);
+                op.setHoja(randomHoja);
+                op.setHabitante(randomHab);
+                op.setFechaOperacion(randomDate);
+                op.setTipo("M");
+                op.setSubtipo("MV");
+
+                Solicitud solicitud = new Solicitud();
+                solicitud.setSolicitante(randomHab);
+                solicitud.setTipo("M");
+                solicitud.setSubtipo("MV");
+                solicitud.setFecha(randomDate);
+                solicitud.setEstado("A");
+                this.solicitudService.save(solicitud);
+                op.setSolicitud(solicitud);
+                this.operacionService.save(op);
+            }
+        }
+        return 200;
     }
 
     @GetMapping("/administrador/poblate")

@@ -29,6 +29,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     @Query("SELECT COUNT(O) FROM Operacion O")
     Integer ratioOperacionesPorSolicitud();
 
-    @Query("SELECT O FROM Operacion o WHERE (O.tipo = 'A' AND O.subtipo = 'CR') OR (O.tipo = 'M' AND O.subtipo = 'MV') AND O.fechaOperacion BETWEEN ?1 AND ?2 AND O.hoja.numeracion.lat IS NOT NULL AND O.hoja.numeracion.lng IS NOT NULL")
+    @Query("SELECT O FROM Operacion O WHERE ((O.tipo = 'A' AND O.subtipo = 'CR') OR (O.tipo = 'M' AND O.subtipo = 'MV')) AND O.fechaOperacion BETWEEN ?1 AND ?2 AND O.hoja.numeracion.lat IS NOT NULL AND O.hoja.numeracion.lng IS NOT NULL")
     List<Operacion> mapaDeCalor(Date start, Date end);
 }
