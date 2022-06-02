@@ -200,7 +200,7 @@ public class SolicitudController {
                 documentoList.add(document);
             }
             Solicitud solicitud = this.service.findById(id);
-            solicitud.setDocumentos(documentoList);
+            solicitud.getDocumentos().addAll(documentoList);
             this.service.save(solicitud);
 
             return new ResponseEntity<>(documentoList, HttpStatus.OK);
