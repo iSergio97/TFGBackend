@@ -1,21 +1,19 @@
 package com.tfg.pmh.controllers;
 
 import com.tfg.pmh.models.Respuesta;
+import com.tfg.pmh.repositories.CountHabitantes;
 import com.tfg.pmh.services.CalleService;
+import com.tfg.pmh.services.HabitanteService;
 import com.tfg.pmh.services.OperacionService;
 import com.tfg.pmh.services.SolicitudService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @RequestMapping("/estadisticas")
 @RestController
@@ -30,6 +28,9 @@ public class EstadisticasController {
 
     @Autowired
     private CalleService calleService;
+
+    @Autowired
+    private HabitanteService habitanteService;
 
     @GetMapping("/fluctuacion")
     public Respuesta fluctuaciones() {
@@ -100,6 +101,21 @@ public class EstadisticasController {
             res.setStatus(404);
             res.setObject(null);
         }
+        return res;
+    }
+
+    @GetMapping("/countSexoHabitantes")
+    public Respuesta contadorSexoHabitantes() {
+        Respuesta res = new Respuesta();
+        try {
+            res.setStatus(200);
+            List<CountHabitantes> ls = this.habitanteService.contadorSexoHabitantes();
+            res.setObject(ls);
+        } catch(Exception e) {
+            res.setStatus(404);
+            res.setObject(null);
+        }
+
         return res;
     }
 }

@@ -15,4 +15,7 @@ public interface HabitanteRepository extends JpaRepository<Habitante, Long> {
 
     @Query("SELECT H FROM Habitante H WHERE H.cuentaUsuario.username = ?1")
     Habitante findByUsername(String username);
+
+    @Query("SELECT H.sexo as nombre, COUNT(H.sexo) as contador FROM Habitante H GROUP BY H.sexo")
+    List<CountHabitantes> contadorSexoHabitantes();
 }

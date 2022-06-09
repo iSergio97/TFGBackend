@@ -1,6 +1,7 @@
 package com.tfg.pmh.services;
 
 import com.tfg.pmh.models.Habitante;
+import com.tfg.pmh.repositories.CountHabitantes;
 import com.tfg.pmh.repositories.HabitanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,5 +45,7 @@ public class HabitanteService {
     public List<Habitante> findAll() {
         return this.repository.findAll();
     }
+
+    public List<CountHabitantes> contadorSexoHabitantes() { return this.repository.contadorSexoHabitantes();}
 
 }
