@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @AllArgsConstructor
@@ -38,4 +39,8 @@ public class Habitante extends Persona {
     
     @Column(unique = true)
     private String identificacion;
+
+    @NotNull
+    @Pattern(regexp = "^[AB]$")
+    private String estado;
 }
