@@ -428,7 +428,7 @@ public class SistemaController {
                 fechaNacimiento.set(year, month, day);
 
                 habitante.setFechaNacimiento(fechaNacimiento.getTime());
-                habitante.setNacionalidad("ESPAÑA");
+                habitante.setNacionalidad(108);
 
                 int tarjeta = random.nextInt(4) + 16;
                 identificador = this.identificadorService.findById((long) tarjeta);

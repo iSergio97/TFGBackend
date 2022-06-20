@@ -82,10 +82,10 @@ public class SolicitudController {
                     // Por aquí no debería salir
                     solicitud.setEstado("R");
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA POR NO ADJUNTAR DOCUMENTOS. SI CREE QUE ES UN ERROR DEL SISTEMA. REALICE OTRA SOLICITUD NUEVA.");
-                } else if("MV".equals(solicitud.getSubtipo()) && solicitud.getSolicitante().getHoja() == null) {
+                } else if("MV".equals(solicitud.getSubtipo()) && "A".equals(solicitud.getSolicitante().getEstado())) {
                     solicitud.setEstado("R");
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA SI NO TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA");
-                } else if("ACR".equals(solicitud.getSubtipo()) && solicitud.getSolicitante().getHoja() != null) {
+                } else if("ACR".equals(solicitud.getSubtipo()) && "B".equals(solicitud.getSolicitante().getEstado())) {
                     solicitud.setEstado("R");
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA SI TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA");
                 }
@@ -372,7 +372,7 @@ public class SolicitudController {
         try {
             Solicitud solicitudBD = this.service.findById(solicitudId);
             // Si se intenta actualizar una solicitud que no está pendiente o el estado no es (A)ceptar o (R)echazar, se devuelve error de petición.
-            if(!solicitudBD.getEstado().equals("P") || !Arrays.asList("A", "R").contains(estado)) {
+            if(!solicitudBD.getEstado().equals("P")) {
                 res = new Respuesta(400, null);
             } else {
                 solicitudBD.setEstado(estado);

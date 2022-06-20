@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
 
-    @Query("SELECT S FROM Solicitud S WHERE S.solicitante.id = ?1")
+    @Query("SELECT S FROM Solicitud S WHERE S.solicitante.id = ?1 ORDER BY S.fecha")
     List<Solicitud> findSolicitudesBySolicitante(Long id);
 
     @Query("SELECT COUNT(S) FROM Solicitud S WHERE S.estado = ?1")

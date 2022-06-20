@@ -24,8 +24,8 @@ public class Habitante extends Persona {
     @Pattern(regexp = "^[HM]$")
     private String sexo;
 
-    @NotBlank
-    private String nacionalidad;
+    @NotNull
+    private Integer nacionalidad;
 
     @Valid
     @ManyToOne
