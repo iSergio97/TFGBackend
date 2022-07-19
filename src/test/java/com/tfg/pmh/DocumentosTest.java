@@ -1,13 +1,22 @@
 package com.tfg.pmh;
 
+import com.mysql.cj.xdevapi.JsonArray;
+import com.sun.jndi.toolkit.url.Uri;
 import com.tfg.pmh.controllers.SolicitudController;
 import com.tfg.pmh.services.DocumentoService;
+import netscape.javascript.JSObject;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.results.ResultMatchers;
@@ -23,7 +32,10 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -50,22 +62,31 @@ public class DocumentosTest {
 
     @Test
     public void getDocumentoByIdAndReturnsOK() throws Exception{
-        //TODO: Probar con docs que ya existan
-        long docId = 100L;
-        Long solicitudId = 101L;
+        long docId = 17212;
+        long solicitudId = 17239;
+
 
         URIBuilder builder = new URIBuilder();
+        HttpUriRequest request = null;
+        HttpResponse response = null;
+
+        // Hacemos Login para la petición
+        String cookie = loginRes();
+
         builder.setScheme("http")
                 .setHost("localhost:8080")
                 .setPath("/solicitud/document/" + docId);
         builder.setParameter("requestId", String.valueOf(solicitudId));
+
         URI uri = builder.build();
 
-        HttpUriRequest request = new HttpGet(uri);
+        request = new HttpGet(uri);
 
-        HttpResponse response = HttpClientBuilder.create().build().execute(request);
+        request.setHeader("Authorization", "Bearer " + cookie);
 
-        assert(response.getStatusLine().getStatusCode() != HttpStatus.OK.value());
+        response = HttpClientBuilder.create().build().execute(request);
+
+        assert(response.getStatusLine().getStatusCode() == HttpStatus.OK.value());
     }
 
     @Test
@@ -75,6 +96,39 @@ public class DocumentosTest {
         Long solicitudId = 101L;
 
         URIBuilder builder = new URIBuilder();
+
+        builder.setScheme("http")
+                .setHost("localhost:8080")
+                .setPath("/solicitud/document/" + docId);
+        builder.setParameter("requestId", String.valueOf(solicitudId));
+
+        URI uri = builder.build();
+
+        HttpUriRequest request = new HttpGet(uri);
+
+        HttpResponse response = HttpClientBuilder.create().build().execute(request);
+
+        builder.setScheme("http")
+                .setHost("localhost:8080")
+                .setPath("/solicitud/document/" + docId);
+        builder.setParameter("requestId", String.valueOf(solicitudId));
+        uri = builder.build();
+
+        request = new HttpGet(uri);
+
+        response = HttpClientBuilder.create().build().execute(request);
+
+        assert(response.getStatusLine().getStatusCode() == HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void solicitudSinCabeceraSeguridad() throws Exception {
+
+        long docId = 100L;
+        Long solicitudId = 101L;
+
+        URIBuilder builder = new URIBuilder();
+
         builder.setScheme("http")
                 .setHost("localhost:8080")
                 .setPath("/solicitud/document/" + docId);
@@ -85,6 +139,30 @@ public class DocumentosTest {
 
         HttpResponse response = HttpClientBuilder.create().build().execute(request);
 
-        assert(response.getStatusLine().getStatusCode() == HttpStatus.BAD_REQUEST.value());
+        assert(response.getStatusLine().getStatusCode() == HttpStatus.FORBIDDEN.value());
+    }
+
+
+    public String loginRes() throws Exception {
+        URIBuilder builder = new URIBuilder();
+
+        builder = builder.setScheme("http")
+                .setHost("localhost:8080")
+                .setPath("/habitante/login");
+        builder.setParameter("username", "habitante0");
+        builder.setParameter("password", "habitante0");
+
+        URI uri = builder.build();
+
+        HttpUriRequest request = new HttpPost(uri);
+
+        HttpResponse response = HttpClientBuilder.create().build().execute(request);
+
+        String jsonResponse = EntityUtils.toString(response.getEntity(), StandardCharsets.ISO_8859_1);
+
+        JSONObject json = new JSONObject(jsonResponse);
+
+        JSONArray object = json.getJSONArray("object");
+        return String.valueOf(object.get(1));
     }
 }
