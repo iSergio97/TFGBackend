@@ -1,5 +1,7 @@
 package com.tfg.pmh.controllers;
 
+import com.tfg.pmh.email.Email;
+import com.tfg.pmh.email.EmailService;
 import com.tfg.pmh.models.*;
 import com.tfg.pmh.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,9 @@ public class SolicitudController {
 
     @Autowired
     private HojaService hojaService;
+
+    @Autowired
+    private EmailService emailService;
     // Métodos para los habitantes
 
     // Documentos: https://www.youtube.com/watch?v=znjhY71F-8I
@@ -82,10 +87,10 @@ public class SolicitudController {
                     // Por aquí no debería salir
                     solicitud.setEstado("R");
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA POR NO ADJUNTAR DOCUMENTOS. SI CREE QUE ES UN ERROR DEL SISTEMA. REALICE OTRA SOLICITUD NUEVA.");
-                } else if("MV".equals(solicitud.getSubtipo()) && "A".equals(solicitud.getSolicitante().getEstado())) {
+                } else if("MV".equals(solicitud.getSubtipo()) && "B".equals(solicitud.getSolicitante().getEstado())) {
                     solicitud.setEstado("R");
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA SI NO TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA");
-                } else if("ACR".equals(solicitud.getSubtipo()) && "B".equals(solicitud.getSolicitante().getEstado())) {
+                } else if("ACR".equals(solicitud.getSubtipo()) && "A".equals(solicitud.getSolicitante().getEstado())) {
                     solicitud.setEstado("R");
                     solicitud.setJustificacion("JUSTIFICACIÓN AUTOMÁTICA: RECHAZADA PORQUE NO PUEDE REALIZAR UNA SOLICITUD DE ALTA POR CAMBIO DE RESIDENCIA SI TIENE VIVIENDA. DEBE REALIZAR UNA SOLICITUD DE MODIFICACIÓN DE VIVIENDA");
                 }
@@ -342,7 +347,20 @@ public class SolicitudController {
     public Respuesta allRequestsAdmin() {
         Respuesta respuesta = new Respuesta();
         try {
-            respuesta.setObject(this.service.findAll());
+            respuesta.setObject(this.service.findAllPendientes());
+            respuesta.setStatus(200);
+        } catch (Exception e) {
+            respuesta.setObject(null);
+            respuesta.setStatus(404);
+        }
+        return respuesta;
+    }
+
+    @GetMapping("/administrador/filtro")
+    public Respuesta requestAdminByFilter(String estado, Date desde, Date hasta) {
+        Respuesta respuesta = new Respuesta();
+        try {
+            respuesta.setObject(this.service.findSolicitudesPorFiltro(estado, desde, hasta));
             respuesta.setStatus(200);
         } catch (Exception e) {
             respuesta.setObject(null);
@@ -382,6 +400,17 @@ public class SolicitudController {
                     realizarOperacion(solicitudBD);
                 }
                 res = new Respuesta(200, solicitudBD);
+                String content = "Su solicitud ha sido aceptada. Podrá comprobar sus datos actualizados en su próximo acceso a la aplicación.";
+                if("R".equals(estado)) {
+                    content = "Su solicitud ha sido rechazada. Para más información, puede leer el comentario que ha sido adjuntado en su solicitud.";
+                } else if ("P".equals(estado)) {
+                    content = "Un administrador ha actualizado su justificación, solicitando más información al respecto sobre el cambio. Para más información, puede acceder a la aplicación, acceder a su solicitud y ver el campo 'Justificación'.";
+                }
+
+                content += "\n\nGracias por usar el sistema del Padrón Online de Habitantes, el lugar donde realizar tus solicitudes desde cualquier parte del mundo.";
+
+                Email email = new Email("POH - Actualización solicitud", solicitudBD.getSolicitante().getEmail(), content);
+                emailService.sendEmail(email);
             }
         } catch (Exception e) {
             // Se ha producido un error inesperado y se va a devolver un 400 como respuesta a la petición

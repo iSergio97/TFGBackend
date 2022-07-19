@@ -14,36 +14,23 @@ public class SolicitudService {
     @Autowired
     private SolicitudRepository repository;
 
-    @Autowired
-    private HojaService hojaService;
-
-    @Autowired
-    private IdentificacionService identificacionService;
-
     public void save(Solicitud solicitud) {
         assert solicitud != null;
 
         this.repository.save(solicitud);
     }
 
-    public Solicitud findById(Long id) {
-        Solicitud solicitud = this.repository.findById(id).orElse(null);
-        // Revisar ambos if porque no entiendo el core de ambos
-        if(null == solicitud.getTipoIdentificacion()) {
-            solicitud.setHoja(this.hojaService.findById(solicitud.getHoja().getId()));
-        }
-        if(solicitud.getHoja() == null) {
-            solicitud.setTipoIdentificacion(this.identificacionService.findByid(solicitud.getTipoIdentificacion().getId()));
-        }
+    public Solicitud findById(Long id) { return this.repository.findById(id).orElse(null); }
 
-        return solicitud;
-    }
-
-    public List<Solicitud> findBySolicitante(Long id) {
-        return this.repository.findSolicitudesBySolicitante(id);
-    }
+    public List<Solicitud> findBySolicitante(Long id) { return this.repository.findSolicitudesBySolicitante(id); }
 
     public List<Solicitud> findAll() { return this.repository.findAll(); }
+
+    public List<Solicitud> findAllPendientes() { return this.repository.findAllPendientes(); }
+
+    public List<Solicitud> findSolicitudesPorFiltro(String estado, Date desde, Date hasta) {
+        return this.repository.findSolicitudesPorFiltro(estado, desde, hasta);
+    }
 
     public Long solicitudesAceptadas() {
         return this.repository.solicitudesPorEstado("A");
