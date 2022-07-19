@@ -37,15 +37,15 @@ public class PmhApplication {
 					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
 					.antMatchers(HttpMethod.POST, "/**/login").permitAll()
-					.antMatchers(HttpMethod.POST, "/sistema/administrador/poblate").permitAll()
+					//.antMatchers(HttpMethod.POST, "/sistema/administrador/poblate").hasAuthority("ADMINISTRADOR")
 					.antMatchers(HttpMethod.GET, "/habitante/**").hasAuthority("HABITANTE")
 					.antMatchers(HttpMethod.POST, "/habitante/**").hasAuthority("HABITANTE")
 					.antMatchers(HttpMethod.POST, "/perfil/**").hasAuthority("HABITANTE")
 					.antMatchers(HttpMethod.GET, "/estadisticas/**").hasAuthority("ADMINISTRADOR")
 					.antMatchers(HttpMethod.GET, "/operaciones/**").hasAuthority("ADMINISTRADOR")
 					.antMatchers(HttpMethod.POST, "/operaciones/**").hasAuthority("ADMINISTRADOR")
-					/*.antMatchers(HttpMethod.GET, "/sistema/**").hasAuthority("ADMINISTRADOR")
-					.antMatchers(HttpMethod.POST, "/sistema/**").hasAuthority("ADMINISTRADOR")*/
+					.antMatchers(HttpMethod.GET, "/sistema/**").hasAuthority("ADMINISTRADOR")
+					.antMatchers(HttpMethod.POST, "/sistema/**").hasAuthority("ADMINISTRADOR")
 					.antMatchers(HttpMethod.GET, "/solicitud/**").authenticated()
 					.antMatchers(HttpMethod.POST, "/solicitud/**").authenticated();
 		}

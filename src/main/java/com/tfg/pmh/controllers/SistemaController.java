@@ -4,7 +4,6 @@ import com.tfg.pmh.models.*;
 import com.tfg.pmh.services.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,18 +12,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/sistema")
@@ -54,12 +48,6 @@ public class SistemaController {
 
     @Autowired
     private SolicitudService solicitudService;
-
-    @Autowired
-    private PaisService paisService;
-
-    @Autowired
-    private ProvinciaService provinciaService;
 
     @Autowired
     private MunicipioService municipioService;
