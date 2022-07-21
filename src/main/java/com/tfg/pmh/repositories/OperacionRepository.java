@@ -1,6 +1,7 @@
 package com.tfg.pmh.repositories;
 
 
+import com.tfg.pmh.forms.MapaCalor;
 import com.tfg.pmh.models.Operacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,23 +30,6 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
     @Query("SELECT COUNT(O) FROM Operacion O")
     Integer ratioOperacionesPorSolicitud();
 
-    @Query("SELECT O FROM Operacion O WHERE ((O.tipo = 'A' AND O.subtipo = 'CR') OR (O.tipo = 'M' AND O.subtipo = 'MV')) AND O.fechaOperacion BETWEEN ?1 AND ?2 AND O.hoja.numeracion.lat IS NOT NULL AND O.hoja.numeracion.lng IS NOT NULL")
-    List<Operacion> mapaDeCalor(Date start, Date end);
-
-    /*
-    TODO OPERACIÓN:
-        - Cantidad de operaciones por cada tipo
-        - Cantidad de operaciones de cada subtipo
-        - Ratio solicitud por operación
-        - Media, mediana y desviación típica de operaciones por habitante -- Esto es un triplazo
-     */
-    /*
-    TODO HABITANTES:
-        - Donut sexo habitantes empadronados
-     */
-
-    /*
-    TODO MAPA CALOR:
-        - Mapa de calor con filtro por operaciones, subtipo y año. La query está hecha, falta el filtro en cliente
-     */
+    @Query("SELECT O.hoja.numeracion.lat AS lat, O.hoja.numeracion.lng AS lng FROM Operacion O WHERE ((O.tipo = 'A' AND O.subtipo = 'CR') OR (O.tipo = 'M' AND O.subtipo = 'MV')) AND O.fechaOperacion BETWEEN ?1 AND ?2 AND O.hoja.numeracion.lat IS NOT NULL AND O.hoja.numeracion.lng IS NOT NULL")
+    List<MapaCalor> mapaDeCalor(Date start, Date end);
 }

@@ -1,5 +1,6 @@
 package com.tfg.pmh.controllers;
 
+import com.tfg.pmh.forms.MapaCalor;
 import com.tfg.pmh.models.*;
 import com.tfg.pmh.services.*;
 import io.jsonwebtoken.Jwts;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -457,13 +459,14 @@ public class SistemaController {
     }
 
     @GetMapping("/operacion/heatmap")
-    public Respuesta heatMap() {
+    public Respuesta heatMap(@RequestParam("start") String start, @RequestParam("end") String end) {
         Respuesta res = new Respuesta();
         try {
-            // Lista que comprenden las operaciones de los 3 últimos años
-            List<List<Operacion>> listaDeLista = this.operacionService.mapaDeCalor();
+            Date fechaInicio = new SimpleDateFormat("yyyy-MM-dd").parse(start);
+            Date fechaFin = new SimpleDateFormat("yyyy-MM-dd").parse(end);
+            List<MapaCalor> mapaCalor = this.operacionService.mapaDeCalor(fechaInicio, fechaFin);
             res.setStatus(200);
-            res.setObject(listaDeLista);
+            res.setObject(mapaCalor);
         } catch (Exception e) {
             res.setStatus(400);
             res.setObject(null);

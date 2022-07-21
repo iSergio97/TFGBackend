@@ -1,5 +1,6 @@
 package com.tfg.pmh.services;
 
+import com.tfg.pmh.forms.MapaCalor;
 import com.tfg.pmh.models.Operacion;
 import com.tfg.pmh.repositories.OperacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,31 +87,6 @@ public class OperacionService {
         return this.repository.ratioOperacionesPorSolicitud() > 0 ? this.repository.ratioOperacionesPorSolicitud() : 1;
     }
 
-    public List<List<Operacion>> mapaDeCalor() {
-        List<List<Operacion>> listaDeListas = new ArrayList<>();
-        Date start = new Date();
-        int actualYear = start.getYear();
-        start.setDate(1);
-        start.setMonth(Calendar.JANUARY);
-        start.setYear(actualYear - 1);
-        Date end = new Date();
-        end.setDate(31);
-        end.setMonth(Calendar.DECEMBER);
-        end.setYear(actualYear - 1);
-
-        List<Operacion> lastYear = this.repository.mapaDeCalor(start, end);
-        start.setYear(actualYear - 2);
-        end.setYear(actualYear - 2);
-        List<Operacion> prevLastYear = this.repository.mapaDeCalor(start, end);
-        start.setYear(actualYear - 3);
-        end.setYear(actualYear - 3);
-        List<Operacion> prevPrevLastYear = this.repository.mapaDeCalor(start, end);
-
-        listaDeListas.add(lastYear);
-        listaDeListas.add(prevLastYear);
-        listaDeListas.add(prevPrevLastYear);
-
-        return listaDeListas;
-    }
+    public List<MapaCalor> mapaDeCalor(Date start, Date end) { return this.repository.mapaDeCalor(start, end); }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -138,6 +139,22 @@ public class SolicitudController {
         Respuesta res = new Respuesta();
         try {
             List<Solicitud> solicitudes = this.service.findBySolicitante(userId);
+            res.setStatus(200);
+            res.setObject(solicitudes);
+        } catch (Exception e) {
+            res.setObject(null);
+            res.setStatus(HttpStatus.BAD_REQUEST.value());
+        }
+        return res;
+    }
+
+    @GetMapping("/habitante/mine/filter")
+    public Respuesta getSolicitudesDeHabConFiltro(@RequestParam("userId") Long userId, @RequestParam("fechaDesde") String fechaDesde, @RequestParam("fechaHasta") String fechaHasta) {
+        Respuesta res = new Respuesta();
+        try {
+            Date fDesde = new SimpleDateFormat("yyyy-MM-dd").parse(fechaDesde);
+            Date fHasta = new SimpleDateFormat("yyyy-MM-dd").parse(fechaHasta);
+            List<Solicitud> solicitudes = this.service.findSolicitudesBySolicitanteFiltro(userId, fDesde, fHasta);
             res.setStatus(200);
             res.setObject(solicitudes);
         } catch (Exception e) {

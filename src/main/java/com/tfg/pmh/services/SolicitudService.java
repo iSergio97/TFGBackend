@@ -24,6 +24,8 @@ public class SolicitudService {
 
     public List<Solicitud> findBySolicitante(Long id) { return this.repository.findSolicitudesBySolicitante(id); }
 
+    public List<Solicitud> findSolicitudesBySolicitanteFiltro(Long id, Date fechaDesde, Date fechaHasta) { return this.repository.findSolicitudesBySolicitanteFiltro(id, fechaDesde, fechaHasta); }
+
     public List<Solicitud> findAll() { return this.repository.findAll(); }
 
     public List<Solicitud> findAllPendientes() { return this.repository.findAllPendientes(); }
