@@ -1,5 +1,6 @@
 package com.tfg.pmh.controllers;
 
+import com.tfg.pmh.forms.GrupoSolicitudes;
 import com.tfg.pmh.models.Respuesta;
 import com.tfg.pmh.repositories.CountHabitantes;
 import com.tfg.pmh.services.CalleService;
@@ -7,12 +8,12 @@ import com.tfg.pmh.services.HabitanteService;
 import com.tfg.pmh.services.OperacionService;
 import com.tfg.pmh.services.SolicitudService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RequestMapping("/estadisticas")
@@ -36,12 +37,23 @@ public class EstadisticasController {
     public Respuesta fluctuaciones() {
         Respuesta res = new Respuesta();
         try {
-            Long aceptadas = this.solicitudService.solicitudesAceptadas();
-            Long rechazadas = this.solicitudService.solicitudesRechazadas();
-            Long pendientes = this.solicitudService.solicitudesPendiente();
-            Long canceladas = this.solicitudService.solicitudesCanceladas();
             res.setStatus(200);
-            res.setObject(Arrays.asList(aceptadas, rechazadas, pendientes, canceladas));
+            res.setObject(this.solicitudService.solicitudesPorEstado());
+        } catch (Exception e) {
+            res.setStatus(404);
+            res.setObject(null);
+        }
+        return res;
+    }
+
+    @GetMapping("/fluctuacion/filter")
+    public Respuesta fluctuacionesFiltro(@RequestParam("fechaDesde") String fechaDesde, @RequestParam("fechaHasta") String fechaHasta){
+        Respuesta res = new Respuesta();
+        try {
+            Date desde = parseaFecha(fechaDesde);
+            Date hasta = parseaFecha(fechaHasta);
+            res.setStatus(200);
+            res.setObject(this.solicitudService.solicitudesPorEstadoFiltro(desde, hasta));
         } catch (Exception e) {
             res.setStatus(404);
             res.setObject(null);
@@ -117,5 +129,9 @@ public class EstadisticasController {
         }
 
         return res;
+    }
+
+    private Date parseaFecha(String fecha) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -152,8 +153,8 @@ public class SolicitudController {
     public Respuesta getSolicitudesDeHabConFiltro(@RequestParam("userId") Long userId, @RequestParam("fechaDesde") String fechaDesde, @RequestParam("fechaHasta") String fechaHasta) {
         Respuesta res = new Respuesta();
         try {
-            Date fDesde = new SimpleDateFormat("yyyy-MM-dd").parse(fechaDesde);
-            Date fHasta = new SimpleDateFormat("yyyy-MM-dd").parse(fechaHasta);
+            Date fDesde = parseaFecha(fechaDesde);
+            Date fHasta = parseaFecha(fechaHasta);
             List<Solicitud> solicitudes = this.service.findSolicitudesBySolicitanteFiltro(userId, fDesde, fHasta);
             res.setStatus(200);
             res.setObject(solicitudes);
@@ -373,11 +374,19 @@ public class SolicitudController {
         return respuesta;
     }
 
-    @GetMapping("/administrador/filtro")
-    public Respuesta requestAdminByFilter(String estado, Date desde, Date hasta) {
+    @GetMapping("/administrador/filter")
+    public Respuesta requestAdminByFilter(@RequestParam("estado") String estado, @RequestParam("desde") String desde, @RequestParam("hasta") String hasta) {
         Respuesta respuesta = new Respuesta();
         try {
-            respuesta.setObject(this.service.findSolicitudesPorFiltro(estado, desde, hasta));
+            Date fechaDesde = parseaFecha(desde);
+            Date fechaHasta = parseaFecha(hasta);
+            List<Solicitud> res;
+            if("T".equals(estado)) {
+                res = this.service.findSolicitudesEntreFechas(fechaDesde, fechaHasta);
+            } else {
+                res = this.service.findSolicitudesPorFiltro(estado, fechaDesde, fechaHasta);
+            }
+            respuesta.setObject(res);
             respuesta.setStatus(200);
         } catch (Exception e) {
             respuesta.setObject(null);
@@ -484,5 +493,9 @@ public class SolicitudController {
         } else if("M".equals(solicitud.getTipo()) && !"MD".equals(solicitud.getSubtipo())) {
             habitante.setHoja(solicitud.getHoja());
         }
+    }
+
+    private Date parseaFecha(String fecha) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
     }
 }

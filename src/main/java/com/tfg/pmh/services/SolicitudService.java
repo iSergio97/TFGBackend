@@ -1,5 +1,6 @@
 package com.tfg.pmh.services;
 
+import com.tfg.pmh.forms.GrupoSolicitudes;
 import com.tfg.pmh.forms.SolicitudesPorFecha;
 import com.tfg.pmh.models.Solicitud;
 import com.tfg.pmh.repositories.SolicitudRepository;
@@ -34,20 +35,16 @@ public class SolicitudService {
         return this.repository.findSolicitudesPorFiltro(estado, desde, hasta);
     }
 
-    public Long solicitudesAceptadas() {
-        return this.repository.solicitudesPorEstado("A");
+    public List<Solicitud> findSolicitudesEntreFechas(Date desde, Date hasta) {
+        return this.repository.findSolicitudesPorFiltro(desde, hasta);
     }
 
-    public Long solicitudesRechazadas() {
-        return this.repository.solicitudesPorEstado("R");
+    public List<GrupoSolicitudes> solicitudesPorEstado() {
+        return this.repository.solicitudesPorEstado();
     }
 
-    public Long solicitudesPendiente() {
-        return this.repository.solicitudesPorEstado("P");
-    }
-
-    public Long solicitudesCanceladas() {
-        return this.repository.solicitudesPorEstado("C");
+    public List<GrupoSolicitudes> solicitudesPorEstadoFiltro(Date fechaDesde, Date fechaHasta) {
+        return this.repository.solicitudesPorEstadoFiltro(fechaDesde, fechaHasta);
     }
 
     public Long contadorSolicitudes() {
