@@ -488,7 +488,6 @@ public class SolicitudController {
             habitante.setNombre(solicitud.getNombre());
             habitante.setPrimerApellido(solicitud.getPrimerApellido());
             habitante.setSegundoApellido(solicitud.getSegundoApellido());
-            // TODO: Comprobar el tipo de identificación para ponérselo al habitante
             habitante.setIdentificacion(solicitud.getIdentificacion());
         } else if("M".equals(solicitud.getTipo()) && !"MD".equals(solicitud.getSubtipo())) {
             habitante.setHoja(solicitud.getHoja());
