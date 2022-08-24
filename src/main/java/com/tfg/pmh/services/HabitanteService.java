@@ -6,7 +6,9 @@ import com.tfg.pmh.repositories.HabitanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -47,5 +49,9 @@ public class HabitanteService {
     }
 
     public List<CountHabitantes> contadorSexoHabitantes() { return this.repository.contadorSexoHabitantes();}
+
+    public List<CountHabitantes> contadorSexoHabitantesFiltro(Integer edadDesde, Integer edadHasta) {
+        Integer anoActual = Calendar.getInstance().get(Calendar.YEAR);
+        return this.repository.contadorSexoHabitantesFiltro(edadDesde, edadHasta, anoActual);}
 
 }

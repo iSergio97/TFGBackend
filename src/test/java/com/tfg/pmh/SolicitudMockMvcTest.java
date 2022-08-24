@@ -2,6 +2,7 @@ package com.tfg.pmh;
 
 import com.tfg.pmh.services.DocumentoService;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -24,13 +25,13 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = PmhApplication.class)
 @AutoConfigureMockMvc
-public class DocumentosTest {
-
-    private static String BASE_URL = "http://localhost:8080/solicitud/document";
+public class SolicitudMockMvcTest {
 
     @Autowired
     private MockMvc mvc;
@@ -38,96 +39,44 @@ public class DocumentosTest {
     @Autowired
     private WebApplicationContext context;
 
-    @Autowired
-    private DocumentoService documentoService;
-
     @Before
     public void setup() {
         this.mvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
     @Test
-    public void getDocumentoByIdAndReturnsOK() throws Exception{
-        long docId = 17212;
-        long solicitudId = 17215;
+    public void SolicitudMvcTest() throws Exception{
+        long solicitudId = 17255;
 
         URIBuilder builder = new URIBuilder();
         HttpUriRequest request = null;
-        HttpResponse response = null;
         // Hacemos Login para la petición
         String cookie = loginRes();
 
         builder.setScheme("http")
                 .setHost("localhost:8080")
-                .setPath("/solicitud/document/" + docId);
-        builder.addParameter("requestId", String.valueOf(solicitudId));
+                .setPath("/solicitud/administrador/update");
+        builder.addParameter("solicitudId", String.valueOf(solicitudId));
+        builder.addParameter("estado", "R");
+        builder.addParameter("justificacion", "Rechazo");
 
         URI uri = builder.build();
 
-        request = new HttpGet(uri);
+        request = new HttpPost(uri);
         request.setHeader("Authorization", "Bearer " + cookie);
 
-        response = HttpClientBuilder.create().build().execute(request);
-
-        assert(response.getStatusLine().getStatusCode() == HttpStatus.OK.value());
-    }
-
-    @Test
-    public void getDocumentoByIdAndReturnsError() throws Exception {
-
-        long docId = 100L;
-        Long solicitudId = 101L;
-
-        URIBuilder builder = new URIBuilder();
-
-        builder.setScheme("http")
-                .setHost("localhost:8080")
-                .setPath("/solicitud/document/" + docId);
-        builder.setParameter("requestId", String.valueOf(solicitudId));
-
-        URI uri = builder.build();
-
-        HttpUriRequest request;
-
-        HttpResponse response;
-
-        request = new HttpGet(uri);
-
-        response = HttpClientBuilder.create().build().execute(request);
-
-        assert(response.getStatusLine().getStatusCode() == HttpStatus.FORBIDDEN.value());
-    }
-
-    @Test
-    public void solicitudSinCabeceraSeguridad() throws Exception {
-
-        long docId = 100L;
-        Long solicitudId = 101L;
-
-        URIBuilder builder = new URIBuilder();
-
-        builder.setScheme("http")
-                .setHost("localhost:8080")
-                .setPath("/solicitud/document/" + docId);
-        builder.setParameter("requestId", String.valueOf(solicitudId));
-        URI uri = builder.build();
-
-        HttpUriRequest request = new HttpGet(uri);
-
         HttpResponse response = HttpClientBuilder.create().build().execute(request);
-
-        assert(response.getStatusLine().getStatusCode() == HttpStatus.FORBIDDEN.value());
+        assert(response.getStatusLine().getStatusCode() == 200);
     }
-
 
     public String loginRes() throws Exception {
         URIBuilder builder = new URIBuilder();
 
         builder = builder.setScheme("http")
                 .setHost("localhost:8080")
-                .setPath("/habitante/login");
-        builder.setParameter("username", "habitante0");
-        builder.setParameter("password", "habitante0");
+                .setPath("/sistema/administrador/login");
+        builder.setParameter("username", "sergio");
+        builder.setParameter("password", "sergio");
 
         URI uri = builder.build();
 

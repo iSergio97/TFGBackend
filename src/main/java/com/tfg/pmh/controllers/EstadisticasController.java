@@ -131,6 +131,22 @@ public class EstadisticasController {
         return res;
     }
 
+    @GetMapping("/countSexoHabitantes/filtro")
+    public Respuesta contadorSexoHabitantesFiltro(@RequestParam("edadDesde") Integer edadDesde, @RequestParam("edadHasta") Integer edadHasta)
+    {
+        Respuesta res = new Respuesta();
+        try {
+            res.setStatus(200);
+            List<CountHabitantes> ls = this.habitanteService.contadorSexoHabitantesFiltro(edadDesde, edadHasta);
+            res.setObject(ls);
+        } catch(Exception e) {
+            res.setStatus(404);
+            res.setObject(null);
+        }
+
+        return res;
+    }
+
     private Date parseaFecha(String fecha) throws ParseException {
         return new SimpleDateFormat("yyyy-MM-dd").parse(fecha);
     }
