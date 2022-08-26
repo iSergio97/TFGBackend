@@ -453,7 +453,7 @@ public class SolicitudController {
         operacion.setSubtipo(solicitud.getSubtipo());
         operacion.setHabitante(solicitante);
         operacion.setSolicitud(solicitud);
-        if(solicitud.getTipo().equals("A") || solicitud.getSubtipo().equals("MD")) {
+        if(solicitud.getSubtipo().equals("MD")) {
             solicitante.setNombre(solicitud.getNombre());
             operacion.setNombre(solicitud.getNombre());
             solicitante.setPrimerApellido(solicitud.getPrimerApellido());
@@ -467,8 +467,7 @@ public class SolicitudController {
             solicitante.setTarjetaIdentificacion(solicitud.getTipoIdentificacion());
             operacion.setTipoIdentificacion(solicitud.getTipoIdentificacion());
         } else {
-            // Corregir esto. Las nuevas operaciones deben crear una hoja nueva en el mismo domicilio.
-            // Por tanto, aquí iría la creación de una nueva hoja del domicilio solicitado
+            solicitante.setEstado("A");
             Hoja hoja = this.hojaService.create(solicitud.getHoja().getNumeracion()); // Creamos una nueva hoja con un número de hoja más
             this.hojaService.save(hoja);
 
