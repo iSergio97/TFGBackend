@@ -2,10 +2,7 @@ package com.tfg.pmh.models;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 import lombok.Data;
 import lombok.Getter;
@@ -31,8 +28,7 @@ public abstract class Persona implements Serializable {
 	@NotBlank
 	private String segundoApellido;
 
-	//TODO: Plantear Regex
-	@NotBlank
+	@Email
 	private String email;
 
 	@NotNull
