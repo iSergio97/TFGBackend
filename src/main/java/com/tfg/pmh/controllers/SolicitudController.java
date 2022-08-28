@@ -426,17 +426,20 @@ public class SolicitudController {
                     realizarOperacion(solicitudBD);
                 }
                 res = new Respuesta(200, solicitudBD);
-                String content = "Su solicitud ha sido aceptada. Podrá comprobar sus datos actualizados en su próximo acceso a la aplicación.";
-                if("R".equals(estado)) {
-                    content = "Su solicitud ha sido rechazada. Para más información, puede leer el comentario que ha sido adjuntado en su solicitud.";
-                } else if ("P".equals(estado)) {
-                    content = "Un administrador ha actualizado su justificación, solicitando más información al respecto sobre el cambio. Para más información, puede acceder a la aplicación, acceder a su solicitud y ver el campo 'Justificación'.";
+
+                if(!solicitudBD.getSolicitante().getEmail().isEmpty()) {
+                    String content = "Su solicitud ha sido aceptada. Podrá comprobar sus datos actualizados en su próximo acceso a la aplicación.";
+                    if("R".equals(estado)) {
+                        content = "Su solicitud ha sido rechazada. Para más información, puede leer el comentario que ha sido adjuntado en su solicitud.";
+                    } else if ("P".equals(estado)) {
+                        content = "Un administrador ha actualizado su justificación, solicitando más información al respecto sobre el cambio. Para más información, puede acceder a la aplicación, acceder a su solicitud y ver el campo 'Justificación'.";
+                    }
+
+                    content += "\n\nGracias por usar el sistema del Padrón Online de Habitantes, el lugar donde realizar tus solicitudes desde cualquier parte del mundo.";
+
+                    Email email = new Email("POH - Actualización solicitud", solicitudBD.getSolicitante().getEmail(), content);
+                    emailService.sendEmail(email);
                 }
-
-                content += "\n\nGracias por usar el sistema del Padrón Online de Habitantes, el lugar donde realizar tus solicitudes desde cualquier parte del mundo.";
-
-                Email email = new Email("POH - Actualización solicitud", solicitudBD.getSolicitante().getEmail(), content);
-                emailService.sendEmail(email);
             }
         } catch (Exception e) {
             // Se ha producido un error inesperado y se va a devolver un 400 como respuesta a la petición
