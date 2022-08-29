@@ -17,7 +17,7 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
     @Query("SELECT S FROM Solicitud S WHERE S.solicitante.id = ?1 ORDER BY S.fecha DESC")
     List<Solicitud> findSolicitudesBySolicitante(Long id);
 
-    @Query("SELECT S FROM Solicitud S WHERE S.solicitante.id = ?1 AND S.fecha BETWEEN ?2 AND ?3 ORDER BY S.fecha DESC")
+    @Query("SELECT S FROM Solicitud S WHERE S.solicitante.id = ?1 AND S.fecha >= ?2 AND S.fecha <= ?3 ORDER BY S.fecha DESC")
     List<Solicitud> findSolicitudesBySolicitanteFiltro(Long id, Date fechaDesde, Date fechaHasta);
 
     @Query("SELECT S.estado as estado, COUNT(S) as cantidad FROM Solicitud S GROUP BY S.estado")

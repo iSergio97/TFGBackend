@@ -155,6 +155,7 @@ public class SolicitudController {
         try {
             Date fDesde = parseaFecha(fechaDesde);
             Date fHasta = parseaFecha(fechaHasta);
+            fHasta.setDate(fHasta.getDate() + 1);
             List<Solicitud> solicitudes = this.service.findSolicitudesBySolicitanteFiltro(userId, fDesde, fHasta);
             res.setStatus(200);
             res.setObject(solicitudes);
@@ -380,6 +381,7 @@ public class SolicitudController {
         try {
             Date fechaDesde = parseaFecha(desde);
             Date fechaHasta = parseaFecha(hasta);
+            fechaHasta.setDate(fechaHasta.getDate() + 1);
             List<Solicitud> res;
             if("T".equals(estado)) {
                 res = this.service.findSolicitudesEntreFechas(fechaDesde, fechaHasta);
